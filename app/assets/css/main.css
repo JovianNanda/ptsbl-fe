@@ -1,0 +1,11 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+@theme static {
+  --font-sans: "Poppins", sans-serif;
+}
+
+.light {
+  --ui-primary: #6cac3a;
+  --ui-secondary: #3b82f6;
+}
