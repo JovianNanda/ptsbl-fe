@@ -17,6 +17,8 @@ export default defineNuxtConfig({
     apiSecret: "",
     public: {
       apiBase: process.env.NUXT_PUBLIC_API_BASE || "http://localhost:1337/api",
+      backendBase:
+        process.env.NUXT_PUBLIC_BACKEND_BASE || "http://localhost:1337",
     },
   },
 });

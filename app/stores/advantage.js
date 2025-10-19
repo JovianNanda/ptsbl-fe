@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { usePreloaderStore } from "~/stores/preloader";
 
-export const useServiceStore = defineStore("service", {
+export const useAdvantageStore = defineStore("advantage", {
   state: () => ({
     data: null,
     error: null,
@@ -9,7 +9,7 @@ export const useServiceStore = defineStore("service", {
   }),
 
   actions: {
-    async fetchService() {
+    async fetchAdvantage() {
       const preloader = usePreloaderStore();
       const config = useRuntimeConfig();
       const baseUrl = config.public.apiBase;
@@ -20,7 +20,7 @@ export const useServiceStore = defineStore("service", {
 
       try {
         const { data, error, pending } = await useFetch(
-          `${baseUrl}/service-section?populate[services][populate]=image`,
+          `${baseUrl}/advantage-section?populate=*`,
           {
             method: "GET",
             headers: { Accept: "application/json" },
@@ -32,7 +32,7 @@ export const useServiceStore = defineStore("service", {
         this.error = error.value;
         this.pending = pending.value;
       } catch (err) {
-        console.error("Failed to fetch service:", err);
+        console.error("Failed to fetch advantage:", err);
         this.error = err;
       } finally {
         this.pending = false;
@@ -42,6 +42,6 @@ export const useServiceStore = defineStore("service", {
   },
 
   getters: {
-    serviceData: (state) => state.data?.data?.data || {},
+    advantageData: (state) => state.data?.data?.data || {},
   },
 });

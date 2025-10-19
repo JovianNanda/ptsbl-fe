@@ -1,4 +1,3 @@
-<!-- components/Navbar.vue -->
 <template>
   <nav
     class="fixed left-0 right-0 z-50 transition-all border-b-0 border-muted/20 shadow-sm bg-white"
@@ -32,20 +31,47 @@
       />
 
       <!-- Mobile Drawer -->
-      <USlideover v-model="isOpen">
+      <USlideover
+        v-model="isOpen"
+        :close="{
+          color: 'primary',
+          variant: 'outline',
+        }"
+        :ui="{ body: 'text-primary ' }"
+      >
         <div class="flex flex-col ml-auto">
           <UButton
-            class="md:hidden flex"
-            variant="ghost"
+            class="md:hidden flex cursor-pointer p-3 rounded-md transition"
             :icon="isOpen ? 'i-heroicons-x-mark' : 'i-heroicons-bars-3'"
             @click="isOpen = false"
           />
-          <UNavigationMenu
-            :items="navItems"
-            orientation="vertical"
-            @click="isOpen = false"
-          />
         </div>
+        <template #title>
+          <div>
+            <NuxtImg
+              src="/images/logoSBL.png"
+              alt="MyCompany Logo"
+              class="md:w-52 w-52"
+            />
+          </div>
+        </template>
+        <template #body>
+          <div class="mt-6">
+            <UNavigationMenu
+              orientation="vertical"
+              variant="link"
+              highlight-color="primary"
+              :items="navbarItems"
+              class="flex flex-col space-y-4 font-normal"
+              font-size="md"
+              font-weight="normal"
+              :ui="{
+                list: 'flex flex-col gap-5',
+                link: 'text-sm font-normal hover:text-primary transition',
+              }"
+            />
+          </div>
+        </template>
       </USlideover>
     </div>
   </nav>
@@ -88,7 +114,7 @@ const navbarItems = [
     },
     ui: {
       // styling applied to this item so it looks like a button in the menu
-      link: "px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-600 transition hover:text-white",
+      link: "px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-600 transition hover:text-white flex text-center items-center justify-center",
     },
   },
 ];

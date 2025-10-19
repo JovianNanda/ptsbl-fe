@@ -1,7 +1,7 @@
 <template>
   <div
     class="min-h-screen bg-cover bg-center"
-    :style="`background-image: url('http://localhost:1337${homePageData.hero_bg_image?.url}')`"
+    :style="`background-image: url('${backendBaseUrl}${homePageData.hero_bg_image?.url}')`"
   >
     <div
       class="backdrop-brightness-40 flex items-center justify-center h-screen"
@@ -33,10 +33,11 @@
                   value.cta_button_class === 'outline-secondary'
                     ? 'border border-secondary bg-white text-secondary hover:bg-secondary hover:text-white active:bg-secondary'
                     : 'bg-primary',
-                  'cursor-pointer px-6 py-2 w-auto flex-1 inline-flex justify-center  transition-all items-center ',
+                  'cursor-pointer px-8 py-3 w-auto flex-1 inline-flex justify-center  transition-all items-center ',
                 ]"
+                class="rounded-full"
               >
-                {{ value.cta_button_text }} <Icon :tags="value.Icon" />
+                {{ value.cta_button_text }} <IconCustom :tags="value.Icon" />
               </UButton>
             </NuxtLink>
           </div>
@@ -49,6 +50,8 @@
 import UBadgeHome from "~/components/BadgeHome.vue";
 import { useHomepageStore } from "~/stores/home";
 
+const runtimeConfig = useRuntimeConfig();
+const backendBaseUrl = runtimeConfig.public.backendBase;
 const homepage = useHomepageStore();
 await homepage.fetchHomepage();
 

@@ -1,8 +1,12 @@
 <template>
   <div>
-    <HomeSections />
+    <HomeSection />
+    <ServiceSection />
+    <AdvantageSection />
   </div>
 </template>
 <script setup>
-import HomeSections from "~/components/sections/HomeSections.vue";
+import HomeSection from "~/components/sections/HomeSection.vue";
+import ServiceSection from "~/components/sections/ServiceSection.vue";
+import AdvantageSection from "~/components/sections/AdvantageSection.vue";
 </script>
