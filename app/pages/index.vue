@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <UApp :toaster="{ position: 'bottom-right', expand: false, duration: 6000 }">
     <HomeSection id="hero" />
     <ServiceSection />
     <AdvantageSection />
@@ -9,7 +9,7 @@
     <PartnerSection />
     <LocationSection id="location" />
     <ContactSection id="contact" />
-  </div>
+  </UApp>
 </template>
 <script setup>
 import HomeSection from "~/components/sections/HomeSection.vue";

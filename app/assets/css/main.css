@@ -8,26 +8,3 @@ html {
 @theme static {
   --font-sans: "Inter", sans-serif;
 }
-
-.light {
-  --ui-primary: #6cac3a;
-  --ui-secondary: #3b82f6;
-}
-.bg-default {
-  --ui-bg: #f9f9f9;
-}
-.ring-default {
-  --tw-ring-color: #6cac3a;
-}
-.text-highlighted {
-  --ui-text-highlighted: #6cac3a;
-}
-.divide-default {
-  :where(& > :not(:last-child)) {
-    --ui-border: #e5e7eb;
-  }
-}
-.bg-soft-secondary {
-  --ui-bg-soft-secondary: #ecfeff;
-  background-color: #ecfeff;
-}

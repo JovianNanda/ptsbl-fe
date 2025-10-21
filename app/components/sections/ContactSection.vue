@@ -52,39 +52,49 @@
           <UForm class="space-y-4" @submit.prevent="handleSubmit">
             <UFormField label="Nama Lengkap" required class="w-full">
               <UInput
-                v-model="form.name"
+                v-model="name"
                 placeholder="Nama Anda"
                 class="w-full"
+                required
               />
             </UFormField>
 
             <UFormField label="Email" required class="w-full">
               <UInput
-                v-model="form.email"
+                v-model="email"
                 type="email"
                 placeholder="email@contoh.com"
                 class="w-full"
+                required
               />
             </UFormField>
 
             <UFormField label="Nomor Telepon" required class="w-full">
               <UInput
-                v-model="form.phone"
+                v-model="phone"
                 placeholder="+62 ..."
                 class="w-full"
+                required
               />
             </UFormField>
 
             <UFormField label="Pesan" required class="w-full">
               <UTextarea
-                v-model="form.message"
+                v-model="message"
                 :rows="4"
                 class="w-full"
                 placeholder="Tulis pesan Anda..."
+                required
               />
             </UFormField>
 
-            <UButton type="submit" block color="primary" class="mt-4 py-2">
+            <UButton
+              type="submit"
+              block
+              color="primary"
+              class="mt-4 py-2"
+              @click="showToast"
+            >
               Kirim Pesan
               <UIcon name="i-heroicons-paper-airplane-20-solid" class="ml-2" />
             </UButton>
@@ -96,7 +106,6 @@
 </template>
 
 <script setup>
-import { reactive } from "vue";
 import { useContactStore } from "~/stores/contact";
 
 const contactStore = useContactStore();
@@ -109,16 +118,22 @@ const contacts = computed(() => {
     : [];
 });
 
-const form = reactive({
-  name: "",
-  email: "",
-  phone: "",
-  message: "",
-});
+const name = ref("");
+const email = ref("");
+const phone = ref("");
+const message = ref("");
 
-const handleSubmit = () => {
-  // di sini bisa tambahkan logic kirim ke API / email / Strapi
-  console.log("Form dikirim:", form);
-  alert("Pesan berhasil dikirim! 😊");
+const handleSubmit = async () => {
+  await contactStore.submitContactForm({
+    name: name.value.trim(),
+    email: email.value.trim(),
+    phone: phone.value.trim(),
+    message: message.value.trim(),
+  });
+
+  name.value = "";
+  email.value = "";
+  phone.value = "";
+  message.value = "";
 };
 </script>
