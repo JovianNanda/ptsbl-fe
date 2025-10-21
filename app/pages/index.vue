@@ -1,14 +1,14 @@
 <template>
   <div>
-    <HomeSection />
+    <HomeSection id="hero" />
     <ServiceSection />
     <AdvantageSection />
     <FleetSection />
     <WorkflowSection />
     <IndustrySection />
     <PartnerSection />
-    <LocationSection />
-    <ContactSection />
+    <LocationSection id="location" />
+    <ContactSection id="contact" />
   </div>
 </template>
 <script setup>

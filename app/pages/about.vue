@@ -57,19 +57,41 @@
         />
       </div>
     </div>
-    <div class="bg-soft-secondary py-16">
-      <CallToAction />
+    <div class="mt-40">
+      <div class="flex flex-col items-center space-y-6">
+        <UBadgeHome
+          :badge="allJourney.badge"
+          class="text-secondary bg-secondary"
+        />
+        <h1
+          class="text-black text-3xl lg:text-6xl font-normal text-center leading-[1.5]"
+        >
+          {{ allJourney.title }}
+        </h1>
+      </div>
+      <div class="flex flex-wrap gap-5 max-w-6xl container mx-auto my-10 px-4">
+        <JourneyCard
+          v-for="(value, item) in allJourney.list"
+          :key="value.id"
+          :data="value"
+          class="flex-1"
+          :index="item + 1"
+        />
+      </div>
     </div>
+    <PartnerSection />
+    <ContactCTA />
   </div>
 </template>
 <script setup>
 import UBadgeHome from "~/components/BadgeHome.vue";
-import CallToAction from "~/components/service/CallToAction.vue";
 import { useAboutStore } from "~/stores/about-us";
 import { useAdvantageStore } from "/stores/advantage";
 import { useCommitmentStore } from "/stores/commitment";
 import { usePrincipleStore } from "/stores/principle";
+import { useJourneyStore } from "/stores/journey";
 import AdvantageCard from "~/components/advantage/AdvantageCard.vue";
+import PartnerSection from "~/components/sections/PartnerSection.vue";
 
 const preloader = usePreloaderStore();
 
@@ -107,9 +129,10 @@ const principleStore = usePrincipleStore();
 await principleStore.fetchPrinciple();
 
 const allPrinciple = computed(() => principleStore.data);
-const principles = computed(() => {
-  return allPrinciple.value?.list;
-});
+
+const journey = useJourneyStore();
+await journey.fetchJourney();
+const allJourney = computed(() => journey.data.data);
 
 const bgImage = computed(() => {
   const img = allAbout.value?.image_bg;

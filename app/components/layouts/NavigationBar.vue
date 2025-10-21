@@ -26,8 +26,14 @@
         font-weight="normal"
         :ui="{
           list: 'gap-5',
-          link: 'text-sm font-normal hover:text-primary transition',
+          link: 'text-sm font-normal hover:text-primary transition cursor-pointer',
         }"
+        :class="[
+          activeSection === (navbarItems.elementId || navbarItems.path)
+            ? 'text-primary font-semibold'
+            : 'text-gray-500 hover:text-primary',
+        ]"
+        @click="handleClick(navbarItems)"
       />
 
       <!-- Mobile Drawer -->
@@ -79,43 +85,79 @@
 <script setup>
 import { ref } from "vue";
 
+const { navigateAndScroll } = useScrollTo();
+const route = useRoute();
+const activeSection = ref(route.path);
 const isOpen = ref(false);
 const navbarItems = [
   {
     label: "Home",
-    to: "/",
     onClick: () => {
-      scrollToElement("hero");
+      navigateAndScroll("/", "hero");
     },
+    elementId: "hero",
   },
   {
     label: "Layanan",
     to: "/services",
+    elementId: null,
   },
   {
     label: "Tentang Kami",
     to: "/about",
+    elementId: null,
   },
   {
     label: "Lokasi",
-    to: "/location",
+    onClick: () => {
+      navigateAndScroll("/", "location");
+    },
+    elementId: "location",
   },
   {
     label: "Kontak",
-    to: "/contact",
+    onClick: () => {
+      navigateAndScroll("/", "contact");
+    },
+    elementId: "contact",
   },
   {
     label: "Hubungi",
-    to: "/contact",
     isButton: true,
-    onClick: () => {
-      // call-to-action behaviour — navigate to contact page
-      window.location.href = "/contact";
-    },
+
     ui: {
       // styling applied to this item so it looks like a button in the menu
       link: "px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-600 transition hover:text-white flex text-center items-center justify-center",
     },
+    elementId: null,
   },
 ];
+
+onMounted(() => {
+  const sections = navbarItems
+    .filter((l) => l.elementId)
+    .map((l) => ({ id: l.elementId, el: document.getElementById(l.elementId) }))
+    .filter((s) => s.el);
+
+  const handleScroll = () => {
+    let current = route.path;
+    for (const { id, el } of sections) {
+      const rect = el.getBoundingClientRect();
+      if (rect.top <= 120 && rect.bottom >= 120) {
+        current = id;
+      }
+    }
+    activeSection.value = current;
+  };
+
+  window.addEventListener("scroll", handleScroll);
+  handleScroll();
+  onBeforeUnmount(() => window.removeEventListener("scroll", handleScroll));
+});
+
+const handleClick = (link) => {
+  activeSection.value = link.elementId || link.path;
+  if (link.elementId) navigateAndScroll(link.path, link.elementId);
+  else navigateTo(link.path);
+};
 </script>
