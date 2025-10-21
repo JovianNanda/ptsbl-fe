@@ -1,5 +1,5 @@
 <template>
-  <div
+  <section
     class="min-h-screen bg-cover bg-center"
     :style="`background-image: url('${backendBaseUrl}${homePageData.hero_bg_image?.url}')`"
   >
@@ -10,13 +10,13 @@
         class="flex flex-col items-center space-y-6 w-11/12 md:w-9/12 lg:w-8/12"
       >
         <div class="flex flex-col items-center space-y-6">
-          <UBadgeHome :home-page-data="homePageData" />
+          <UBadgeHome :badge="homePageData.badge" />
           <h1
             class="text-white text-3xl lg:text-5xl font-normal text-center leading-[1.5]"
           >
             {{ homePageData.hero_title }}
           </h1>
-          <p class="text-white text-lg md:text-xl font-[200] text-justify">
+          <p class="text-white text-sm md:text-lg font-[200] text-justify">
             {{ homePageData.hero_subtitle }}
           </p>
         </div>
@@ -44,7 +44,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 <script setup>
 import UBadgeHome from "~/components/BadgeHome.vue";

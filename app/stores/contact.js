@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { usePreloaderStore } from "~/stores/preloader";
 
-export const useServiceStore = defineStore("service", {
+export const useContactStore = defineStore("contact", {
   state: () => ({
     data: null,
     error: null,
@@ -9,10 +9,10 @@ export const useServiceStore = defineStore("service", {
   }),
 
   actions: {
-    async fetchService() {
+    async fetchContact() {
+      const preloader = usePreloaderStore();
       const config = useRuntimeConfig();
       const baseUrl = config.public.apiBase;
-      const preloader = usePreloaderStore();
 
       preloader.show();
       this.pending = true;
@@ -20,20 +20,19 @@ export const useServiceStore = defineStore("service", {
 
       try {
         const { data, error, pending } = await useFetch(
-          `${baseUrl}/service-section?populate[image_bg]=true&populate[services][populate][image]=true&populate[services][populate][list]=true`,
+          `${baseUrl}/contact-section?populate=*`,
           {
-            key: "services-store",
             method: "GET",
             headers: { Accept: "application/json" },
             transform: (data) => data,
           }
         );
 
-        this.data = data.value || null;
-        this.error = error.value || null;
+        this.data = data.value;
+        this.error = error.value;
         this.pending = pending.value;
       } catch (err) {
-        console.error("Failed to fetch service:", err);
+        console.error("Failed to fetch contact:", err);
         this.error = err;
       } finally {
         this.pending = false;
@@ -43,6 +42,6 @@ export const useServiceStore = defineStore("service", {
   },
 
   getters: {
-    serviceData: (state) => state.data?.data?.attributes?.services?.data || [],
+    contactData: (state) => state.data?.data?.data || {},
   },
 });

@@ -12,7 +12,10 @@
     <template #body>
       <div class="flex flex-col gap-4 flex-1">
         <div
-          class="text-white bg-secondary flex items-center justify-center w-16 h-16 rounded-2xl"
+          class="text-white flex items-center justify-center w-16 h-16 rounded-2xl"
+          :class="
+            index % 2 === 0 ? 'bg-secondary' : 'bg-primary' ?? 'bg-secondary'
+          "
         >
           <IconCustom :tags="props.advantage.icon" width="38" height="38" />
         </div>
@@ -35,6 +38,10 @@ const props = defineProps({
   advantage: {
     type: Object,
     required: true,
+  },
+  index: {
+    type: [String, Number],
+    default: null,
   },
 });
 </script>

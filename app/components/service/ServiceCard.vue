@@ -12,9 +12,7 @@
           class="w-12 h-12 p-2 rounded-2xl"
           style="color: white !important"
           :class="
-            (props.service.icon?.color || '').toLowerCase() === '6cac3a'
-              ? 'bg-primary'
-              : 'bg-secondary'
+            props.service.position % 2 === 0 ? 'bg-primary' : 'bg-secondary'
           "
         />
       </div>
