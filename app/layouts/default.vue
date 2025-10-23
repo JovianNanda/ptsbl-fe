@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import Preloader from "~/components/PreLoader.vue";
+import Preloader from "~/components/Preloader.vue";
 import NavigationBar from "~/components/layouts/NavigationBar.vue";
 import Footer from "~/components/layouts/Footer.vue";
 import { usePreloaderStore } from "~/stores/preloader";
