@@ -3,12 +3,12 @@
     <div class="container mx-auto text-center">
       <!-- Subtitle -->
       <p class="text-primary font-light uppercase tracking-wide mb-2">
-        {{ allWorkflow.data.badge }}
+        {{ allWorkflow?.data?.badge }}
       </p>
 
       <!-- Title -->
       <h2 class="text-3xl md:text-4xl font-normal text-black mb-12">
-        {{ allWorkflow.data.title }}
+        {{ allWorkflow?.data?.title }}
       </h2>
 
       <!-- vertical -->
@@ -22,7 +22,7 @@
           <!-- items -->
 
           <div
-            v-for="(item, index) in allWorkflow.data.list"
+            v-for="(item, index) in allWorkflow?.data?.list ?? [null]"
             :key="index"
             class="flex flex-col md:flex-row group items-center text-center relative mb-10"
           >
@@ -58,7 +58,7 @@
           />
           <div class="flex justify-between w-full">
             <div
-              v-for="(item, index) in allWorkflow.data.list"
+              v-for="(item, index) in allWorkflow?.data?.list ?? []"
               :key="index"
               class="flex flex-col group items-center text-center w-1/5 relative"
             >
@@ -67,15 +67,15 @@
                 class="w-20 h-20 flex hover:scale-110 hover:filter-[brightness(1.2)] transition items-center justify-center rounded-full text-white bg-primary z-10"
               >
                 <IconCustom
-                  :tags="item.icon"
+                  :tags="item?.icon"
                   style="width: 32px; height: 32px"
                 />
               </div>
               <h3 class="font-normal text-sm text-black mt-4">
-                {{ index + 1 + `. ` + item.title }}
+                {{ index + 1 + `. ` + item?.title }}
               </h3>
               <p class="text-gray-500 text-sm mt-4 max-w-[150px]">
-                {{ item.subtitle }}
+                {{ item?.subtitle }}
               </p>
             </div>
           </div>
@@ -85,17 +85,17 @@
         class="flex flex-col md:flex-row gap-8 bg-linear-to-tr to-[#F0FDF41] from-[#6cac3a4d] p-5 md: rounded-2xl mt-16 px-16 py-10 md:p-10 w-fit mx-auto"
       >
         <div
-          v-for="list in allWorkflow.data.sublist"
-          :key="list.id"
+          v-for="list in allWorkflow?.data?.sublist ?? []"
+          :key="list?.id"
           class="flex gap-2"
         >
           <div class="flex justify-center">
             <Icon class="text-primary text-2xl" name="uil:check-circle" />
           </div>
           <div class="flex flex-col text-start">
-            <h4 class="font-light text-black -mt-1">{{ list.title }}</h4>
+            <h4 class="font-light text-black -mt-1">{{ list?.title }}</h4>
             <p class="text-gray-500 text-sm">
-              {{ list.subtitle }}
+              {{ list?.subtitle }}
             </p>
           </div>
         </div>

@@ -8,36 +8,36 @@
       >
         <div>
           <h2 class="text-lg font-light text-secondary mb-4 uppercase">
-            {{ allFleet.data.badge }}
+            {{ allFleet?.data?.badge }}
           </h2>
           <h1 class="text-3xl md:text-4xl text-black leading-tight">
-            {{ allFleet.data.title }}
+            {{ allFleet?.data?.title }}
           </h1>
           <p class="text-gray-500 mt-4 text-sm md:text-lg">
-            {{ allFleet.data.subtitle }}
+            {{ allFleet?.data?.subtitle }}
           </p>
         </div>
         <div
           class="flex justify-between items-center md:gap-12 bg-white px-8 py-4 lg:mt-10 xl:mt-30 mt-10 md:mt-4 md:flex-row mx-auto rounded-3xl shadow-lg xl:w-fit"
         >
           <div
-            v-for="stats in allFleet.data.stats"
-            :key="stats.id"
+            v-for="stats in allFleet?.data?.stats"
+            :key="stats?.id"
             class="mx-4 text-center justify-center flex flex-col items-center gap-2"
           >
             <IconCustom
-              :tags="stats.icon"
+              :tags="stats?.icon"
               width="28"
               height="28"
               :class="
-                stats.position % 2 === 0 ? 'text-secondary' : 'text-primary'
+                stats?.position % 2 === 0 ? 'text-secondary' : 'text-primary'
               "
             />
 
             <h1 class="text-black text-xl">
-              {{ stats.value }}
+              {{ stats?.value }}
             </h1>
-            <p class="text-gray-500 text-sm">{{ stats.label }}</p>
+            <p class="text-gray-500 text-sm">{{ stats?.label }}</p>
           </div>
         </div>
       </div>
@@ -46,7 +46,7 @@
       >
         <div class="flex flex-1">
           <NuxtImg
-            :src="`${backendBaseUrl}${allFleet.data.image?.url}`"
+            :src="`${backendBaseUrl}${allFleet?.data?.image?.url}`"
             alt="Fleet Image"
             class="flex w-fit object-cover xl:max-h-10/12 h-full flex-1"
           />
@@ -79,7 +79,7 @@
               Response Time
             </p>
             <h1 class="text-black text-lg flex-1 text-start">
-              {{ allFleet.data.response_time }}
+              {{ allFleet?.data?.response_time }}
             </h1>
           </div>
         </div>

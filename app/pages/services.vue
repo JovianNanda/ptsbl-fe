@@ -12,14 +12,14 @@
           class="flex flex-col items-center space-y-6 w-11/12 md:w-9/12 lg:w-8/12"
         >
           <div class="flex flex-col items-center space-y-6">
-            <UBadgeHome :badge="allService.badge" class="bg-secondary" />
+            <UBadgeHome :badge="allService?.badge" class="bg-secondary" />
             <h1
               class="text-white text-3xl lg:text-6xl font-normal text-center leading-[1.5]"
             >
-              {{ allService.title }}
+              {{ allService?.title }}
             </h1>
             <p class="text-white text-lg md:text-xl font-[200] text-justify">
-              {{ allService.subtitle }}
+              {{ allService?.subtitle }}
             </p>
           </div>
         </div>
@@ -27,10 +27,10 @@
     </section>
     <div class="flex flex-col gap-10 mx-auto container my-20">
       <DetailCard
-        v-for="(value, index) in services"
-        :key="value.id"
+        v-for="(value, index) in services ?? []"
+        :key="value?.id"
         :index="index + 1"
-        :data="value"
+        :data="value ?? {}"
         :total="services.length"
         title="LAYANAN"
       />

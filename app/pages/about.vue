@@ -13,13 +13,13 @@
         >
           <div class="flex flex-col items-center space-y-6">
             <UBadgeHome
-              :badge="allAbout.badge"
+              :badge="allAbout?.badge"
               class="bg-transparent outline-1 outline-primary text-primary"
             />
             <h1
               class="text-white text-3xl lg:text-6xl font-normal text-center leading-[1.5]"
             >
-              {{ allAbout.title }}
+              {{ allAbout?.title }}
             </h1>
             <p class="text-white text-lg md:text-xl font-[200] text-justify">
               {{ allAbout.subtitle }}
@@ -30,14 +30,14 @@
     </section>
     <div class="flex flex-col gap-10 mx-auto container my-20">
       <DetailCard
-        :key="allAdvantages.id"
-        :data="allAdvantages"
+        :key="allAdvantages?.id"
+        :data="allAdvantages ?? {}"
         title="KEUNGGULAN"
         index="0"
       />
       <DetailCard
-        :key="allCommitment.id"
-        :data="allCommitment"
+        :key="allCommitment?.id"
+        :data="allCommitment ?? {}"
         title="KOMITMEN"
       />
     </div>
@@ -45,12 +45,12 @@
       <h1
         class="text-black text-3xl lg:text-4xl font-light text-center leading-[1.5]"
       >
-        {{ allPrinciple.data.title }}
+        {{ allPrinciple?.data?.title }}
       </h1>
       <div class="flex flex-wrap gap-5 container mx-auto my-10 px-4">
         <AdvantageCard
-          v-for="(value, item) in allPrinciple.data.list"
-          :key="value.id"
+          v-for="(value, item) in allPrinciple?.data?.list ?? []"
+          :key="value?.id"
           :advantage="value"
           class="flex-1"
           :index="item + 1"
@@ -60,18 +60,18 @@
     <div class="mt-40">
       <div class="flex flex-col items-center space-y-6">
         <UBadgeHome
-          :badge="allJourney.badge"
+          :badge="allJourney?.badge"
           class="text-secondary bg-secondary"
         />
         <h1
           class="text-black text-3xl lg:text-6xl font-normal text-center leading-[1.5]"
         >
-          {{ allJourney.title }}
+          {{ allJourney?.title }}
         </h1>
       </div>
       <div class="flex flex-wrap gap-5 max-w-6xl container mx-auto my-10 px-4">
         <JourneyCard
-          v-for="(value, item) in allJourney.list"
+          v-for="(value, item) in allJourney?.list ?? []"
           :key="value.id"
           :data="value"
           class="flex-1"
