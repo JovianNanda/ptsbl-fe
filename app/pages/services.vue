@@ -31,7 +31,7 @@
         :key="value?.id"
         :index="index + 1"
         :data="value ?? {}"
-        :total="services.length"
+        :total="services?.length"
         title="LAYANAN"
       />
     </div>
@@ -56,16 +56,16 @@ const backendBaseUrl = runtimeConfig.public.backendBase;
 const servicesStore = useServiceStore();
 await servicesStore.fetchService();
 
-const allService = computed(() => servicesStore.data.data);
+const allService = computed(() => servicesStore?.data?.data);
 
 const bgImage = computed(() => {
-  const img = allService.value?.image_bg?.[0];
+  const img = allService?.value?.image_bg?.[0];
   if (!img?.url) return null;
   return `${backendBaseUrl}${img.url}`;
 });
 
 const services = computed(() => {
-  const list = allService.value?.services;
+  const list = allService?.value?.services;
   return Array.isArray(list)
     ? [...list].sort((a, b) => a.position - b.position)
     : [];

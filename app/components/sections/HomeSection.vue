@@ -55,5 +55,5 @@ const backendBaseUrl = runtimeConfig.public.backendBase;
 const homepage = useHomepageStore();
 await homepage.fetchHomepage();
 
-const homePageData = computed(() => homepage.data.data);
+const homePageData = computed(() => homepage?.data?.data);
 </script>

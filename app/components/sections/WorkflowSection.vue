@@ -30,20 +30,23 @@
               v-if="item"
               class="w-16 h-16 flex hover:scale-110 transition items-center justify-center rounded-full text-white bg-primary z-10"
             >
-              <IconCustom :tags="item.icon" style="width: 28px; height: 28px" />
+              <IconCustom
+                :tags="item?.icon"
+                style="width: 28px; height: 28px"
+              />
             </div>
 
             <div
-              v-if="index !== allWorkflow.data.list.length - 1"
+              v-if="index !== allWorkflow?.data?.list?.length - 1"
               class="absolute top-[100%] left-1/2 transform -translate-x-1/2 w-[2px] h-10 bg-gray-300"
             ></div>
 
             <div class="mt-4 bg-white px-4 py-2 rounded-lg shadow-md">
               <h3 class="font-semibold text-black text-sm">
-                {{ index + 1 + `. ` + item.title }}
+                {{ index + 1 + `. ` + item?.title }}
               </h3>
               <p class="text-gray-500 text-sm mt-2 max-w-[200px] mx-auto">
-                {{ item.subtitle }}
+                {{ item?.subtitle }}
               </p>
             </div>
           </div>
@@ -59,7 +62,7 @@
           <div class="flex justify-between w-full">
             <div
               v-for="(item, index) in allWorkflow?.data?.list ?? []"
-              :key="index"
+              :key="index ?? 0"
               class="flex flex-col group items-center text-center w-1/5 relative"
             >
               <div
@@ -72,7 +75,7 @@
                 />
               </div>
               <h3 class="font-normal text-sm text-black mt-4">
-                {{ index + 1 + `. ` + item?.title }}
+                {{ index ?? 0 + 1 + `. ` + item?.title }}
               </h3>
               <p class="text-gray-500 text-sm mt-4 max-w-[150px]">
                 {{ item?.subtitle }}
@@ -109,5 +112,5 @@ import { useWorkflowStore } from "~/stores/workflow";
 
 const workflowStore = useWorkflowStore();
 await workflowStore.fetchWorkflow();
-const allWorkflow = computed(() => workflowStore.data);
+const allWorkflow = computed(() => workflowStore?.data);
 </script>

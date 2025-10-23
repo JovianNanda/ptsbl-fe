@@ -28,15 +28,11 @@ import { useAdvantageStore } from "~/stores/advantage";
 
 const advantageStore = useAdvantageStore();
 await advantageStore.fetchAdvantage();
-const allAdvantages = computed(() => advantageStore.data.data);
+const allAdvantages = computed(() => advantageStore?.data?.data);
 const advantages = computed(() => {
   const list = allAdvantages.value?.advantages;
   return Array.isArray(list)
     ? [...list].sort((a, b) => a.position - b.position)
     : [];
-});
-
-onMounted(() => {
-  console.log("ADVANTAGES", allAdvantages);
 });
 </script>

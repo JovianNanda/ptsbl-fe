@@ -42,7 +42,7 @@
               >
                 {{ value?.subtitle }}
               </a>
-              <p class="text-gray-500 text-sm">{{ value.description }}</p>
+              <p class="text-gray-500 text-sm">{{ value?.description }}</p>
             </div>
           </UCard>
         </div>
@@ -110,7 +110,7 @@ import { useContactStore } from "~/stores/contact";
 
 const contactStore = useContactStore();
 await contactStore.fetchContact();
-const allContact = computed(() => contactStore.data);
+const allContact = computed(() => contactStore?.data);
 const contacts = computed(() => {
   const list = allContact.value?.data.cardList;
   return Array.isArray(list)

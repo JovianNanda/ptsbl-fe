@@ -59,7 +59,7 @@
             loop="true"
           >
             <source
-              :src="`${backendBaseUrl}${allFleet.data.video?.url}`"
+              :src="`${backendBaseUrl}${allFleet?.data?.video?.url}`"
               type="video/mp4"
             />
             Your browser does not support the video tag.
@@ -94,5 +94,5 @@ const runtimeConfig = useRuntimeConfig();
 const backendBaseUrl = runtimeConfig.public.backendBase;
 const fleetStore = useFleetStore();
 await fleetStore.fetchFleet();
-const allFleet = computed(() => fleetStore.data);
+const allFleet = computed(() => fleetStore?.data);
 </script>

@@ -22,7 +22,7 @@
               {{ allAbout?.title }}
             </h1>
             <p class="text-white text-lg md:text-xl font-[200] text-justify">
-              {{ allAbout.subtitle }}
+              {{ allAbout?.subtitle }}
             </p>
           </div>
         </div>
@@ -30,13 +30,13 @@
     </section>
     <div class="flex flex-col gap-10 mx-auto container my-20">
       <DetailCard
-        :key="allAdvantages?.id"
+        :key="allAdvantages?.id ?? 0"
         :data="allAdvantages ?? {}"
         title="KEUNGGULAN"
         index="0"
       />
       <DetailCard
-        :key="allCommitment?.id"
+        :key="allCommitment?.id ?? 0"
         :data="allCommitment ?? {}"
         title="KOMITMEN"
       />
@@ -109,9 +109,9 @@ await advantageStore.fetchAdvantage();
 const commitmentStore = useCommitmentStore();
 await commitmentStore.fetchCommitment();
 
-const allAbout = computed(() => aboutStore.data.data);
+const allAbout = computed(() => aboutStore?.data?.data);
 const allAdvantages = computed(() => {
-  const data = advantageStore.data?.data;
+  const data = advantageStore?.data?.data;
   if (!data) return null;
 
   return {
@@ -123,19 +123,19 @@ const allAdvantages = computed(() => {
       })) || [],
   };
 });
-const allCommitment = computed(() => commitmentStore.data.data);
+const allCommitment = computed(() => commitmentStore?.data?.data);
 
 const principleStore = usePrincipleStore();
 await principleStore.fetchPrinciple();
 
-const allPrinciple = computed(() => principleStore.data);
+const allPrinciple = computed(() => principleStore?.data);
 
 const journey = useJourneyStore();
 await journey.fetchJourney();
-const allJourney = computed(() => journey.data.data);
+const allJourney = computed(() => journey?.data?.data);
 
 const bgImage = computed(() => {
-  const img = allAbout.value?.image_bg;
+  const img = allAbout?.value?.image_bg;
   if (!img?.url) return null;
   return `${backendBaseUrl}${img.url}`;
 });
