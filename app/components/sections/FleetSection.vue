@@ -43,7 +43,7 @@
       </div>
 
       <div
-        class="grid grid-rows-2 md:grid-rows-1 grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-5xl mx-auto"
+        class="grid grid-rows-2 md:grid-rows-1 grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-5xl mx-auto relative"
       >
         <div class="w-full aspect-[4/5] overflow-hidden">
           <UCarousel
