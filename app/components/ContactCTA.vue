@@ -11,18 +11,31 @@
         B3 terbaik
       </p>
 
-      <UButton
-        color="white"
-        variant="solid"
-        size="lg"
-        class="text-green-600 font-medium rounded-full bg-gray-100 shadow-md hover:shadow-lg hover:scale-105 hover:cursor-pointer transition-all px-8 py-4"
-      >
-        Hubungi Kami Sekarang
-      </UButton>
+      <NuxtLink href="https://wa.me/" +${telp} rel="noopener">
+        <UButton
+          color="white"
+          variant="solid"
+          size="lg"
+          class="text-green-600 font-medium rounded-full bg-gray-100 shadow-md hover:shadow-lg hover:scale-105 hover:cursor-pointer transition-all px-8 py-4"
+        >
+          Hubungi Kami Sekarang
+        </UButton>
+      </NuxtLink>
     </div>
   </section>
 </template>
 
 <script setup>
-// If using Nuxt UI, make sure UButton is available globally
+import { useContactStore } from "~/stores/contact";
+
+const contactStore = useContactStore();
+await contactStore.fetchContact();
+const allContact = computed(() => contactStore?.data);
+const contacts = computed(() => {
+  const list = allContact.value?.data.cardList;
+  return Array.isArray(list)
+    ? [...list].sort((a, b) => a.position - b.position)
+    : [];
+});
+const telp = (contacts.value[0]?.subtitle || "").replace(/\+/g, "");
 </script>

@@ -11,14 +11,14 @@
         {{ allPartners?.data?.subtitle }}
       </p>
 
-      <div class="flex flex-wrap gap-8 justify-center mx-auto max-w-4xl mt-10">
+      <UMarquee pause-on-hover class="bg-soft-secondary my-10" overlay="false">
         <NuxtImg
           v-for="value in allPartners?.data?.partnerImage ?? []"
           :key="value?.id"
           :src="backendBaseUrl + value?.url"
-          class="m-4 h-30 w-30 object-contain hover:scale-105 transition-all"
+          class="m-4 object-contain hover:scale-105 transition-all size-40 shrink-0"
         />
-      </div>
+      </UMarquee>
 
       <BigCardList
         :stats="allPartners?.data?.partnerStats ?? []"
@@ -37,3 +37,12 @@ const partnerStore = usePartnerStore();
 await partnerStore.fetchPartner();
 const allPartners = computed(() => partnerStore.data);
 </script>
+<style scoped>
+.before\:bg-gradient-to-r {
+  &::before {
+    content: var(--tw-content);
+    --tw-gradient-position: to right in oklab;
+    background-image: linear-gradient(var(--tw-gradient-stops));
+  }
+}
+</style>

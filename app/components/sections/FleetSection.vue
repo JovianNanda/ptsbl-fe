@@ -1,7 +1,7 @@
 <template>
   <section class="pt-32 pb-14 bg-soft-secondary md:px-4">
     <div
-      class="flex flex-col md:justify-between items-center md:items-start lg:flex-row gap-10 md:gap-4 px-4 md:px-0"
+      class="flex flex-col md:justify-between items-center md:items-start xl:flex-row gap-10 md:gap-4 px-4 md:px-0"
     >
       <div
         class="container mx-auto max-w-xl text-center md:text-left items-start justify-start flex flex-col w-full"
@@ -41,22 +41,44 @@
           </div>
         </div>
       </div>
+
       <div
-        class="flex flex-col sm:flex-row flex-1 mt-20 gap-5 lg:mt-0 relative xl:max-h-10/12 h-full"
+        class="grid grid-rows-2 md:grid-rows-1 grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-5xl mx-auto"
       >
-        <div class="flex flex-1">
-          <NuxtImg
-            :src="`${backendBaseUrl}${allFleet?.data?.image?.url}`"
-            alt="Fleet Image"
-            class="flex w-fit object-cover xl:max-h-10/12 h-full flex-1"
-          />
+        <div class="w-full aspect-[4/5] overflow-hidden">
+          <UCarousel
+            v-slot="{ item }"
+            loop
+            autoplay
+            pagination
+            wheel-gestures
+            :items="images"
+            class="w-full h-full object-cover fleet-carousel aspect-[4/5]"
+            :ui="{
+              item: 'w-full h-full object-cover fleet-carousel aspect-[4/5]',
+            }"
+          >
+            <img
+              :src="item"
+              class="w-full h-full object-cover items-stretch !object-center block aspect-[4/5]"
+            />
+          </UCarousel>
         </div>
-        <div class="flex w-full flex-1">
+        <!-- <NuxtImg
+            v-for="image in allFleet?.data?.images"
+            :key="image"
+            :src="`${backendBaseUrl}${image.url}`"
+            alt="Fleet Image"
+            class="flex w-fit object-cover xl:max-h-5/12 h-full flex-1"
+          /> -->
+
+        <div class="w-full aspect-[4/5] overflow-hidden">
           <video
-            class="w-full xl:max-h-10/12 h-full flex-1"
-            autoplay="autoplay"
+            class="w-full h-full object-cover"
+            autoplay
+            loop
             muted
-            loop="true"
+            playsinline
           >
             <source
               :src="`${backendBaseUrl}${allFleet?.data?.video?.url}`"
@@ -89,10 +111,33 @@
 </template>
 <script setup>
 import { useFleetStore } from "~/stores/fleet";
-
 const runtimeConfig = useRuntimeConfig();
 const backendBaseUrl = runtimeConfig.public.backendBase;
+
 const fleetStore = useFleetStore();
 await fleetStore.fetchFleet();
 const allFleet = computed(() => fleetStore?.data);
+
+const images = computed(() => {
+  return allFleet?.value?.data?.images?.map((img) => backendBaseUrl + img.url);
+});
 </script>
+<style scoped>
+.fleet-carousel,
+.fleet-media {
+  width: 100%;
+  aspect-ratio: 3 / 4; /* important: controls height stability */
+  border-radius: 16px;
+  object-fit: cover;
+  overflow: hidden;
+  min-height: 500px;
+  align-items: stretch;
+}
+
+@media (max-width: 768px) {
+  .fleet-media,
+  .fleet-carousel {
+    aspect-ratio: 4 / 5;
+  }
+}
+</style>

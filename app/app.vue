@@ -8,3 +8,6 @@
 </template>
 
 <script setup></script>
+<style>
+@import "aos/dist/aos.css";
+</style>
