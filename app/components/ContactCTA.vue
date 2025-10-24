@@ -11,7 +11,7 @@
         B3 terbaik
       </p>
 
-      <NuxtLink href="https://wa.me/" +${telp} rel="noopener">
+      <NuxtLink :href="`https://wa.me/${telp}`" rel="noopener">
         <UButton
           color="white"
           variant="solid"
