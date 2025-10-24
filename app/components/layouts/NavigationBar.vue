@@ -9,11 +9,7 @@
         class="w-6 h-6 text-primary-500"
       /> -->
         <NuxtLink to="/">
-          <NuxtImg
-            src="/images/logoSBL.png"
-            alt="MyCompany Logo"
-            class="md:w-52 w-52"
-          />
+          <img src="/images/LogoSBL.png" alt="" srcset="" />
         </NuxtLink>
       </div>
 
