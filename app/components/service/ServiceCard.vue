@@ -1,7 +1,6 @@
 <template>
   <UBlogPost
-    to="https://nuxt.com/blog/nuxt-icon-v1-0"
-    target="_blank"
+    to="services"
     class="ring ring-[#E2E8F0] text-black rounded-3xl group"
     variant="outline"
   >
@@ -33,7 +32,7 @@
           {{ props.service.description }}
         </p>
         <NuxtLink
-          :to="`/services/${props.service.slug}`"
+          :to="`/services`"
           class="text-secondary font-light group-hover:underline flex items-center gap-2 mt-2"
         >
           Selengkapnya <Icon name="uil:arrow-right" />
