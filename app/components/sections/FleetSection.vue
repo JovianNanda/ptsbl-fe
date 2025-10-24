@@ -35,7 +35,7 @@
             />
 
             <h1 class="text-black text-xl">
-              {{ stats?.value }}
+              <AnimatedNumber :target="stats?.value" :duration="1500" />
             </h1>
             <p class="text-gray-500 text-sm">{{ stats?.label }}</p>
           </div>
@@ -43,7 +43,8 @@
       </div>
 
       <div
-        class="grid grid-rows-2 md:grid-rows-1 grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-5xl mx-auto relative"
+        class="relative grid grid-rows-2 md:grid-rows-1 grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-5xl mx-auto"
+        style="position: relative"
       >
         <div class="w-full aspect-[4/5] overflow-hidden">
           <UCarousel
@@ -98,7 +99,10 @@
               Response Time
             </p>
             <h1 class="text-black text-lg flex-1 text-start">
-              {{ allFleet?.data?.response_time }}
+              <AnimatedNumber
+                :target="allFleet?.data?.response_time"
+                :duration="1500"
+              />
             </h1>
           </div>
         </div>

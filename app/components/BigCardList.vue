@@ -12,7 +12,7 @@
           class="text-4xl md:text-5xl xl:text-6xl"
           :class="stat.position % 2 === 0 ? 'text-secondary' : 'text-primary'"
         >
-          {{ stat.value }}
+          <AnimatedNumber :target="stat.value" :duration="1500" />
         </h1>
         <p class="text-sm font-light text-gray-400">{{ stat.label }}</p>
       </div>
