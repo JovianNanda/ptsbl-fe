@@ -47,7 +47,9 @@
       >
         {{ allPrinciple?.data?.title }}
       </h1>
-      <div class="flex flex-wrap gap-5 container mx-auto my-10 px-4">
+      <div
+        class="flex flex-wrap flex-col lg:flex-row gap-5 container mx-auto my-10 px-4 md:px-0"
+      >
         <AdvantageCard
           v-for="(value, item) in allPrinciple?.data?.list ?? []"
           :key="value?.id"
@@ -69,12 +71,14 @@
           {{ allJourney?.title }}
         </h1>
       </div>
-      <div class="flex flex-wrap gap-5 max-w-6xl container mx-auto my-10 px-4">
+      <div
+        class="flex flex-wrap flex-col md:flex-row md:justify-center md:items-center gap-5 max-w-6xl container mx-auto my-10 px-4"
+      >
         <JourneyCard
           v-for="(value, item) in allJourney?.list ?? []"
           :key="value.id"
           :data="value"
-          class="flex-1"
+          class="flex-1 md:flex-0 md:flex-grow-0 md:flex-shrink-0 md:basis-[30%]"
           :index="item + 1"
         />
       </div>

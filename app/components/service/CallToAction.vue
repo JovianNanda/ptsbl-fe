@@ -16,24 +16,42 @@
 
       <div class="flex flex-col sm:flex-row justify-center gap-4">
         <!-- Call Button -->
-        <UButton
-          icon="i-heroicons-phone"
-          size="lg"
-          color="secondary"
-          class="rounded-full shadow-md px-6 text-white cursor-pointer"
-        >
-          Hubungi: +62 21 1234 5678
-        </UButton>
+        <NuxtLink :to="'tel:' + contacts[0]?.subtitle">
+          <UButton
+            icon="i-heroicons-phone"
+            size="lg"
+            color="secondary"
+            class="rounded-full shadow-md px-6 text-white cursor-pointer"
+          >
+            Hubungi
+            {{ contacts[0]?.subtitle }}</UButton
+          >
+        </NuxtLink>
 
         <!-- Email Button -->
-        <UButton
-          icon="i-heroicons-envelope"
-          size="lg"
-          class="rounded-full border border-primary text-primary bg-white hover:bg-primary hover:text-white px-6 cursor-pointer"
+        <NuxtLink :to="'mailto:' + contacts[1]?.subtitle">
+          <UButton
+            icon="i-heroicons-envelope"
+            size="lg"
+            class="rounded-full border border-primary text-primary bg-white hover:bg-primary hover:text-white px-6 cursor-pointer"
+          >
+            Email Kami
+          </UButton></NuxtLink
         >
-          Email Kami
-        </UButton>
       </div>
     </UCard>
   </UContainer>
 </template>
+<script setup>
+import { useContactStore } from "~/stores/contact";
+
+const contactStore = useContactStore();
+await contactStore.fetchContact();
+const allContact = computed(() => contactStore?.data);
+const contacts = computed(() => {
+  const list = allContact.value?.data.cardList;
+  return Array.isArray(list)
+    ? [...list].sort((a, b) => a.position - b.position)
+    : [];
+});
+</script>

@@ -9,7 +9,7 @@
         class="w-6 h-6 text-primary-500"
       /> -->
         <NuxtLink to="/">
-          <img src="/images/LogoSBL.png" alt="" srcset="" />
+          <img src="/images/LogoSBL.png" alt="" srcset="" class="w-50" />
         </NuxtLink>
       </div>
 
@@ -80,6 +80,18 @@
 </template>
 <script setup>
 import { ref } from "vue";
+import { useContactStore } from "~/stores/contact";
+
+const contactStore = useContactStore();
+await contactStore.fetchContact();
+const allContact = computed(() => contactStore?.data);
+const contacts = computed(() => {
+  const list = allContact.value?.data.cardList;
+  return Array.isArray(list)
+    ? [...list].sort((a, b) => a.position - b.position)
+    : [];
+});
+const Telp = (contacts.value[0]?.subtitle || "").replace(/\+/g, "");
 
 const { navigateAndScroll } = useScrollTo();
 const route = useRoute();
@@ -120,6 +132,9 @@ const navbarItems = [
   {
     label: "Hubungi",
     isButton: true,
+    onClick: () => {
+      window.location.href = `https://wa.me/${Telp}`;
+    },
 
     ui: {
       // styling applied to this item so it looks like a button in the menu

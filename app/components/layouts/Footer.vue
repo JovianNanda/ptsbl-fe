@@ -24,16 +24,28 @@
           <h4 class="font-semibold text-white mb-3">Quick Links</h4>
           <ul class="space-y-2 text-sm">
             <li>
-              <NuxtLink to="/layanan" class="hover:underline">Layanan</NuxtLink>
+              <NuxtLink to="/services" class="hover:underline"
+                >Layanan</NuxtLink
+              >
             </li>
             <li>
-              <NuxtLink to="/tentang" class="hover:underline">Tentang</NuxtLink>
+              <NuxtLink to="/about" class="hover:underline">Tentang</NuxtLink>
             </li>
             <li>
-              <NuxtLink to="/lokasi" class="hover:underline">Lokasi</NuxtLink>
+              <NuxtLink
+                to="/"
+                class="hover:underline"
+                @click.prevent="navigateAndScroll('location')"
+                >Lokasi</NuxtLink
+              >
             </li>
             <li>
-              <NuxtLink to="/kontak" class="hover:underline">Kontak</NuxtLink>
+              <NuxtLink
+                to="/"
+                class="hover:underline"
+                @click.prevent="navigateAndScroll('contact')"
+                >Kontak</NuxtLink
+              >
             </li>
           </ul>
         </div>
@@ -43,19 +55,38 @@
           <h4 class="font-semibold text-white mb-3">Kontak</h4>
           <ul class="space-y-2 text-sm">
             <li class="flex items-start gap-2">
-              <UIcon
-                name="i-heroicons-map-pin-20-solid"
-                class="w-5 h-5 mt-0.5"
-              />
-              Jakarta Timur 13930
+              <NuxtLink
+                :to="
+                  'https://www.google.com/maps/search/?api=1&query=' +
+                  contacts[2]?.subtitle
+                "
+                target="_blank"
+                class="flex items-start gap-2 hover:underline"
+              >
+                <UIcon
+                  name="i-heroicons-map-pin-20-solid"
+                  class="w-5 h-5 mt-0.5"
+                />
+                {{ contacts[2]?.subtitle }}
+              </NuxtLink>
             </li>
             <li class="flex items-center gap-2">
-              <UIcon name="i-heroicons-phone-20-solid" class="w-5 h-5" />
-              +62 21 1234 5678
+              <NuxtLink
+                :to="'tel:' + contacts[0]?.subtitle"
+                class="flex items-center gap-2 hover:underline"
+              >
+                <UIcon name="i-heroicons-phone-20-solid" class="w-5 h-5" />
+                {{ contacts[0]?.subtitle }}
+              </NuxtLink>
             </li>
             <li class="flex items-center gap-2">
-              <UIcon name="i-heroicons-envelope-20-solid" class="w-5 h-5" />
-              info@saranabumilestari.co.id
+              <NuxtLink
+                :to="'mailto:' + contacts[1]?.subtitle"
+                class="flex items-center gap-2 hover:underline"
+              >
+                <UIcon name="i-heroicons-envelope-20-solid" class="w-5 h-5" />
+                {{ contacts[1]?.subtitle }}
+              </NuxtLink>
             </li>
           </ul>
         </div>
@@ -69,3 +100,28 @@
     </div>
   </footer>
 </template>
+<script setup>
+import { useContactStore } from "~/stores/contact";
+import { useRouter } from "vue-router";
+
+const contactStore = useContactStore();
+await contactStore.fetchContact();
+const allContact = computed(() => contactStore?.data);
+const contacts = computed(() => {
+  const list = allContact.value?.data.cardList;
+  return Array.isArray(list)
+    ? [...list].sort((a, b) => a.position - b.position)
+    : [];
+});
+
+const router = useRouter();
+
+function navigateAndScroll(elementId) {
+  // Navigate first
+  router.push("/").then(() => {
+    // Scroll after navigation
+    const el = document.getElementById(elementId);
+    if (el) el.scrollIntoView({ behavior: "smooth" });
+  });
+}
+</script>
