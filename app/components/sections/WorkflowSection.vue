@@ -43,7 +43,7 @@
 
             <div class="mt-4 bg-white px-4 py-2 rounded-lg shadow-md">
               <h3 class="font-semibold text-black text-sm">
-                {{ index + 1 + `. ` + item?.title }}
+                {{ item?.title }}
               </h3>
               <p class="text-gray-500 text-sm mt-2 max-w-[200px] mx-auto">
                 {{ item?.subtitle }}
@@ -75,7 +75,7 @@
                 />
               </div>
               <h3 class="font-normal text-sm text-black mt-4">
-                {{ index ?? 0 + 1 + `. ` + item?.title }}
+                {{ item?.title }}
               </h3>
               <p class="text-gray-500 text-sm mt-4 max-w-[150px]">
                 {{ item?.subtitle }}

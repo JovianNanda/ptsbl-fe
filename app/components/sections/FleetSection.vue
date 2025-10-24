@@ -49,14 +49,11 @@
           <UCarousel
             v-slot="{ item }"
             loop
-            autoplay
             pagination
             wheel-gestures
+            :autoplay="{ delay: 2000 }"
             :items="images"
-            class="w-full h-full object-cover fleet-carousel aspect-[4/5]"
-            :ui="{
-              item: 'w-full h-full object-cover fleet-carousel aspect-[4/5]',
-            }"
+            class="w-full h-full object-cover fleet-carousel aspect-[4/5] relative"
           >
             <img
               :src="item"
