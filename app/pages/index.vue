@@ -1,12 +1,12 @@
 <template>
   <UApp :toaster="{ position: 'bottom-right', expand: false, duration: 6000 }">
     <HomeSection id="hero" />
-    <ServiceSection />
-    <AdvantageSection />
-    <FleetSection />
-    <WorkflowSection />
-    <IndustrySection />
-    <PartnerSection />
+    <ServiceSection id="hero" />
+    <AdvantageSection id="hero" />
+    <FleetSection id="hero" />
+    <WorkflowSection id="hero" />
+    <IndustrySection id="hero" />
+    <PartnerSection id="hero" />
     <LocationSection id="location" />
     <ContactSection id="contact" />
   </UApp>

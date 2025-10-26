@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { usePreloaderStore } from "~/stores/preloader";
+import { useStrapiLocale } from "~/composables/useStrapiLocale";
 
 export const useJourneyStore = defineStore("journey", {
   state: () => ({
@@ -10,6 +11,7 @@ export const useJourneyStore = defineStore("journey", {
 
   actions: {
     async fetchJourney() {
+      const isoLocale = useStrapiLocale();
       const preloader = usePreloaderStore();
       const config = useRuntimeConfig();
       const baseUrl = config.public.apiBase;
@@ -20,7 +22,7 @@ export const useJourneyStore = defineStore("journey", {
 
       try {
         const { data, error, pending } = await useFetch(
-          `${baseUrl}/company-journey?populate=*`,
+          `${baseUrl}/company-journey?populate=*&locale=${isoLocale.value}`,
           {
             method: "GET",
             headers: { Accept: "application/json" },

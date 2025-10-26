@@ -2,7 +2,9 @@
   <div class="light">
     <NuxtLoadingIndicator />
     <NuxtLayout>
-      <NuxtPage :key="$route.fullPath" />
+      <UApp>
+        <NuxtPage :key="$route.fullPath" />
+      </UApp>
     </NuxtLayout>
   </div>
 </template>

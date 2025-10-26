@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { usePreloaderStore } from "~/stores/preloader";
+import { useStrapiLocale } from "~/composables/useStrapiLocale";
 
 export const useAdvantageStore = defineStore("advantage", {
   state: () => ({
@@ -10,6 +11,7 @@ export const useAdvantageStore = defineStore("advantage", {
 
   actions: {
     async fetchAdvantage() {
+      const isoLocale = useStrapiLocale();
       const preloader = usePreloaderStore();
       const config = useRuntimeConfig();
       const baseUrl = config.public.apiBase;
@@ -20,7 +22,7 @@ export const useAdvantageStore = defineStore("advantage", {
 
       try {
         const { data, error, pending } = await useFetch(
-          `${baseUrl}/advantage-section?populate=*`,
+          `${baseUrl}/advantage-section?populate=*&locale=${isoLocale.value}`,
           {
             method: "GET",
             headers: { Accept: "application/json" },

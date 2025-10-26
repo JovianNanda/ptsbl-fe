@@ -3,172 +3,196 @@
     class="fixed left-0 right-0 z-50 transition-all border-b-0 border-muted/20 shadow-sm bg-white"
   >
     <div class="flex items-center w-full px-4 lg:px-28 py-3">
-      <div class="flex items-center space-x-2">
-        <!-- <UIcon
-        name="i-heroicons-cube-transparent"
-        class="w-6 h-6 text-primary-500"
-      /> -->
-        <NuxtLink to="/">
-          <img src="/images/LogoSBL.png" alt="" srcset="" class="w-50" />
-        </NuxtLink>
-      </div>
+      <!-- Logo -->
+      <NuxtLink to="/">
+        <img src="/images/LogoSBL.png" alt="Logo" class="w-50" />
+      </NuxtLink>
 
-      <UNavigationMenu
-        variant="link"
-        highlight-color="primary"
-        :items="navbarItems"
-        class="w-full justify-end hidden md:flex font-normal"
-        font-size="md"
-        font-weight="normal"
-        :ui="{
-          list: 'gap-5',
-          link: 'text-sm font-normal hover:text-primary transition cursor-pointer',
-        }"
-        :class="[
-          activeSection === (navbarItems.elementId || navbarItems.path)
-            ? 'text-primary font-semibold'
-            : 'text-gray-500 hover:text-primary',
-        ]"
-        @click="handleClick(navbarItems)"
-      />
+      <!-- Desktop Nav -->
+      <ul class="w-full justify-end hidden md:flex gap-5 items-center">
+        <li v-for="item in navbarItems" :key="item.label">
+          <NuxtLink
+            v-if="item.to && !item.isButton"
+            :to="item.to"
+            :class="itemActiveClass(item)"
+            class="text-sm font-normal transition cursor-pointer"
+            @click="() => onNavItemClick(item)"
+          >
+            {{ t(item.label) }}
+          </NuxtLink>
 
-      <!-- Mobile Drawer -->
-      <USlideover
-        v-model="isOpen"
-        :close="{
-          color: 'primary',
-          variant: 'outline',
-        }"
-        :ui="{ body: 'text-primary ' }"
-      >
-        <div class="flex flex-col ml-auto">
-          <UButton
-            class="md:hidden flex cursor-pointer p-3 rounded-md transition"
-            :icon="isOpen ? 'i-heroicons-x-mark' : 'i-heroicons-bars-3'"
-            @click="isOpen = false"
-          />
-        </div>
+          <button
+            v-else-if="item.isButton"
+            :class="item.ui?.link || defaultButtonClass"
+            class="cursor-pointer"
+            @click="() => onNavItemClick(item)"
+          >
+            {{ t(item.label) }}
+          </button>
+
+          <span
+            v-else
+            :class="itemActiveClass(item)"
+            class="text-sm font-normal transition cursor-pointer"
+            @click="() => onNavItemClick(item)"
+          >
+            {{ t(item.label) }}
+          </span>
+        </li>
+      </ul>
+
+      <!-- Mobile -->
+      <USlideover v-model="isOpen">
         <template #title>
-          <div>
-            <NuxtImg
-              src="/images/logoSBL.png"
-              alt="MyCompany Logo"
-              class="md:w-52 w-52"
-            />
-          </div>
+          <img src="/images/LogoSBL.png" alt="Logo" class="w-40" />
         </template>
+
         <template #body>
-          <div class="mt-6">
-            <UNavigationMenu
-              orientation="vertical"
-              variant="link"
-              highlight-color="primary"
-              :items="navbarItems"
-              class="flex flex-col space-y-4 font-normal"
-              font-size="md"
-              font-weight="normal"
-              :ui="{
-                list: 'flex flex-col gap-5',
-                link: 'text-sm font-normal hover:text-primary transition',
-              }"
-            />
+          <div class="mt-6 flex flex-col space-y-4">
+            <button
+              v-for="item in navbarItems"
+              :key="item.label + '-mobile'"
+              :class="mobileItemClass(item)"
+              @click="
+                () => {
+                  onNavItemClick(item);
+                  isOpen = false;
+                }
+              "
+            >
+              {{ t(item.label) }}
+            </button>
           </div>
         </template>
       </USlideover>
     </div>
   </nav>
+  <button
+    class="fixed bottom-4 right-4 bg-primary text-white px-4 py-2 rounded-full shadow-lg hover:bg-primary-600 transition z-50 uppercase"
+    aria-label="Change language"
+    @click="switchLocale"
+  >
+    {{ localeValue }}
+  </button>
 </template>
-<script setup>
-import { ref } from "vue";
-import { useContactStore } from "~/stores/contact";
 
+<script setup>
+import { useI18n } from "vue-i18n";
+
+import { ref, computed, watch } from "vue";
+import { useRoute, useRouter } from "#app";
+import { useContactStore } from "~/stores/contact";
+import { useSectionObserver } from "~/composables/useSectionObserver";
+
+const { locale, t, setLocale } = useI18n();
+
+const localeValue = ref(locale.value);
+
+function switchLocale() {
+  setLocale(locale.value === "en" ? "id" : "en");
+}
+
+watch(locale, (newVal) => {
+  localeValue.value = newVal;
+});
+
+// ✅ State
+const isOpen = ref(false);
+const route = useRoute();
+const router = useRouter();
+
+// ✅ Contact (WhatsApp)
 const contactStore = useContactStore();
 await contactStore.fetchContact();
-const allContact = computed(() => contactStore?.data);
-const contacts = computed(() => {
-  const list = allContact.value?.data.cardList;
-  return Array.isArray(list)
-    ? [...list].sort((a, b) => a.position - b.position)
-    : [];
-});
-const Telp = (contacts.value[0]?.subtitle || "").replace(/\+/g, "");
+const Telp = computed(() =>
+  (contactStore?.data?.data?.cardList?.[0]?.subtitle || "").replace(/\+/g, "")
+);
 
-const { navigateAndScroll } = useScrollTo();
-const route = useRoute();
-const activeSection = ref(route.path);
-const isOpen = ref(false);
-const navbarItems = [
-  {
-    label: "Home",
-    onClick: () => {
-      navigateAndScroll("/", "hero");
-    },
-    elementId: "hero",
-  },
-  {
-    label: "Layanan",
-    to: "/services",
-    elementId: null,
-  },
-  {
-    label: "Tentang Kami",
-    to: "/about",
-    elementId: null,
-  },
-  {
-    label: "Lokasi",
-    onClick: () => {
-      navigateAndScroll("/", "location");
-    },
-    elementId: "location",
-  },
-  {
-    label: "Kontak",
-    onClick: () => {
-      navigateAndScroll("/", "contact");
-    },
-    elementId: "contact",
-  },
-  {
-    label: "Hubungi",
-    isButton: true,
-    onClick: () => {
-      window.location.href = `https://wa.me/${Telp}`;
-    },
+// ✅ Active Section Observer (only works on home)
+const { activeSection } = useSectionObserver(["hero", "location", "contact"]);
 
-    ui: {
-      // styling applied to this item so it looks like a button in the menu
-      link: "px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-600 transition hover:text-white flex text-center items-center justify-center",
-    },
-    elementId: null,
-  },
-];
-
-onMounted(() => {
-  const sections = navbarItems
-    .filter((l) => l.elementId)
-    .map((l) => ({ id: l.elementId, el: document.getElementById(l.elementId) }))
-    .filter((s) => s.el);
-
-  const handleScroll = () => {
-    let current = route.path;
-    for (const { id, el } of sections) {
-      const rect = el.getBoundingClientRect();
-      if (rect.top <= 120 && rect.bottom >= 120) {
-        current = id;
-      }
+watch(
+  () => route.path,
+  async (newPath) => {
+    if (newPath !== "/") {
+      // Leaving home → clear active section
+      activeSection.value = null;
+      return;
     }
-    activeSection.value = current;
-  };
+  },
+  { immediate: true }
+);
 
-  window.addEventListener("scroll", handleScroll);
-  handleScroll();
-  onBeforeUnmount(() => window.removeEventListener("scroll", handleScroll));
-});
+// ✅ Helper: scroll to section
+async function scrollToSection(section) {
+  const el = document.getElementById(section);
+  if (el) {
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+}
 
-const handleClick = (link) => {
-  activeSection.value = link.elementId || link.path;
-  if (link.elementId) navigateAndScroll(link.path, link.elementId);
-  else navigateTo(link.path);
-};
+// ✅ Navigation data
+const navbarItems = computed(() => [
+  { label: "home", to: "/", section: "hero" },
+  { label: "services", to: "/services" },
+  { label: "about", to: "/about" },
+  { label: "location", to: "/", section: "location" },
+  { label: "contact", to: "/", section: "contact" },
+  {
+    label: "buttonContact",
+    isButton: true,
+    onClick: () => window.open(`https://wa.me/${Telp.value}`, "_blank"),
+  },
+]);
+
+// ✅ Decide if an item is currently active
+function isItemActive(item) {
+  // ✅ If in homepage → use section observer
+  if (route.path === "/" && item.section) {
+    return activeSection.value === item.section;
+  }
+
+  // ✅ If not homepage → use route only
+  if (!item.section && item.to) {
+    return item.to === route.path;
+  }
+
+  return false;
+}
+
+const itemActiveClass = (item) =>
+  isItemActive(item)
+    ? "text-primary font-semibold"
+    : "text-gray-500 hover:text-primary";
+
+const mobileItemClass = (item) =>
+  isItemActive(item)
+    ? "text-primary font-bold text-left p-3"
+    : "text-gray-700 p-3 text-left";
+
+async function onNavItemClick(item) {
+  if (item.isButton && item.onClick) {
+    item.onClick();
+    return;
+  }
+
+  // ✅ Scroll to section on Home
+  if (item.section) {
+    if (route.path !== "/") {
+      await router.push("/"); // ✅ No navigateTo for in-app routing
+      await nextTick();
+    }
+    scrollToSection(item.section);
+    activeSection.value = item.section;
+    return;
+  }
+
+  // ✅ Normal page navigation
+  if (item.to) {
+    router.push(item.to);
+  }
+}
+
+const defaultButtonClass =
+  "px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-600 transition";
 </script>

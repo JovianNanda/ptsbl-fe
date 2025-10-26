@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { usePreloaderStore } from "~/stores/preloader";
+import { useStrapiLocale } from "~/composables/useStrapiLocale";
 
 export const useWorkflowStore = defineStore("workflow", {
   state: () => ({
@@ -10,6 +11,7 @@ export const useWorkflowStore = defineStore("workflow", {
 
   actions: {
     async fetchWorkflow() {
+      const isoLocale = useStrapiLocale();
       const preloader = usePreloaderStore();
       const config = useRuntimeConfig();
       const baseUrl = config.public.apiBase;
@@ -20,7 +22,7 @@ export const useWorkflowStore = defineStore("workflow", {
 
       try {
         const { data, error, pending } = await useFetch(
-          `${baseUrl}/flow-section?populate=*`,
+          `${baseUrl}/flow-section?populate=*&locale=${isoLocale.value}`,
           {
             method: "GET",
             headers: { Accept: "application/json" },

@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { usePreloaderStore } from "~/stores/preloader";
+import { useStrapiLocale } from "~/composables/useStrapiLocale";
 
 export const useCommitmentStore = defineStore("commitment", {
   state: () => ({
@@ -10,6 +11,7 @@ export const useCommitmentStore = defineStore("commitment", {
 
   actions: {
     async fetchCommitment() {
+      const isoLocale = useStrapiLocale();
       const preloader = usePreloaderStore();
       const config = useRuntimeConfig();
       const baseUrl = config.public.apiBase;
@@ -20,7 +22,7 @@ export const useCommitmentStore = defineStore("commitment", {
 
       try {
         const { data, error, pending } = await useFetch(
-          `${baseUrl}/commitment-section?populate=*`,
+          `${baseUrl}/commitment-section?populate=*&locale=${isoLocale.value}`,
           {
             method: "GET",
             headers: { Accept: "application/json" },

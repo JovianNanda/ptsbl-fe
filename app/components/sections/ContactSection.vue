@@ -17,12 +17,12 @@
           <UCard
             v-for="value in contacts ?? []"
             :key="value?.id"
-            class="flex flex-row items-start gap-4 bg-green-50 border-none shadow-none ring-0 flex-1"
+            class="flex flex-row items-start gap-4 bg-green-50 border-none shadow-none ring-0 flex-1 py-4"
             :ui="{ body: 'flex flex-row gap-4' }"
             :class="value?.position % 2 === 0 ? 'bg-green-50' : 'bg-blue-50'"
           >
             <div
-              class="flex w-fit items-center justify-center p-4 rounded-xl"
+              class="flex items-center justify-center p-4 rounded-xl"
               :class="
                 value?.position % 2 === 0
                   ? 'bg-gradient-to-tr to-[#6CAC3A] from-[#00A63E]'
@@ -34,8 +34,6 @@
             <div class="flex-col">
               <h4 class="font-medium text-gray-800">{{ value?.title }}</h4>
               <a
-                href="mailto:info@saranabumilestari.co.id"
-                class="hover:underline block"
                 :class="
                   value.position % 2 === 0 ? 'text-green-600' : 'text-blue-600'
                 "

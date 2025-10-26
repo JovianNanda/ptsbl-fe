@@ -18,13 +18,13 @@
       <NuxtImg
         :src="`${backendBaseUrl}${props.service.image?.url}`"
         alt="Service Thumbnail"
-        class="w-full h-full group-hover:scale-105 transition-all rounded-t-3xl"
+        class="w-full h-full group-hover:scale-105 object-cover max-w-3xl transition-all rounded-t-3xl"
         quality="80"
         format="webp"
       />
     </template>
     <template #body>
-      <div class="flex flex-col gap-4">
+      <div class="flex flex-col gap-4 flex-1">
         <h1 class="text-xl text-black leading-tight">
           {{ props.service.title }}
         </h1>
@@ -33,7 +33,7 @@
         </p>
         <NuxtLink
           :to="`/services`"
-          class="text-secondary font-light group-hover:underline flex items-center gap-2 mt-2"
+          class="text-secondary font-light group-hover:underline flex items-center gap-2 mt-auto"
         >
           Selengkapnya <Icon name="uil:arrow-right" />
         </NuxtLink>

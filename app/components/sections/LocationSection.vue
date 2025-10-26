@@ -6,7 +6,7 @@
     <div
       class="flex flex-wrap gap-5 mt-12 mx-4 lg:mx-auto justify-center items-stretch h-full"
     >
-      <div class="flex gap-5 flex-col lg:flex-row w-full">
+      <div class="flex gap-5 flex-col px-5 xl:flex-row w-full">
         <LocationCard
           v-for="location in allLocations?.data?.locations ?? []"
           :key="location?.id"

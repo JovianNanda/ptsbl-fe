@@ -1,28 +1,28 @@
 <template>
   <div
-    class="container mx-auto px-4 py-10"
+    class="container mx-auto lg:px-4 lg:py-10"
     :data-aos="index % 2 === 0 ? 'fade-left' : 'fade-right'"
     data-aos-duration="1000"
   >
     <UCard
       :ui="{
         body: [
-          'flex flex-col md:flex-row gap-10 overflow-hidden border-0',
-          index % 2 === 0 ? 'md:flex-row-reverse' : '',
+          'flex flex-col lg:flex-row gap-10 overflow-hidden border-0 sm:p-10 items-stretch f;',
+          index % 2 === 0 ? 'lg:flex-row-reverse' : '',
         ].join(' '),
         rounded: '2xl',
         shadow: 'lg',
       }"
-      class="ring-0 divide-0 divide-y-0"
+      class="ring-0 divide-0 divide-y-0 items-stretch"
     >
       <div
-        class="relative flex w-full md:w-1/2 rounded-xl overflow-hidden"
-        :class="{ 'md:flex-row-reverse': index % 2 === 0 }"
+        class="relative flex w-full lg:w-1/2 rounded-xl overflow-hidden"
+        :class="{ 'lg:flex-row-reverse': index % 2 === 0 }"
       >
         <NuxtImg
           :src="backendBaseUrl + props?.data?.image?.url"
           :alt="props?.data?.title"
-          class="w-full h-64 md:h-full rounded-2xl object-cover"
+          class="w-full h-82 lg:h-[35rem] rounded-2xl object-cover"
         />
         <div
           v-if="props?.data?.icon"
@@ -40,7 +40,7 @@
       </div>
 
       <!-- Content Section -->
-      <div class="flex flex-col md:w-1/2">
+      <div class="flex flex-col lg:w-1/2">
         <p
           class="text-xs font-semibold mb-1 uppercase"
           :class="index % 2 === 0 ? 'text-primary' : 'text-secondary'"
@@ -54,7 +54,7 @@
             {{ props?.index }}/{{ props?.total }}
           </span>
         </p>
-        <h2 class="text-3xl md:text-4xl font-light text-black my-3">
+        <h2 class="text-3xl lg:text-4xl font-light text-black my-3">
           {{ props?.data?.title }}
         </h2>
         <p class="text-gray-500 mb-4">

@@ -10,9 +10,20 @@ export default defineNuxtConfig({
     "@nuxt/ui",
     "@pinia/nuxt",
     "nuxt-aos",
+    "@nuxtjs/i18n",
   ],
 
   css: ["~/assets/css/main.css"],
+
+  i18n: {
+    strategy: "prefix_except_default",
+    defaultLocale: "id",
+    langDir: "locales/",
+    locales: [
+      { code: "en", iso: "en", name: "English", file: "en.json" },
+      { code: "id", iso: "id-ID", name: "Bahasa Indonesia", file: "id.json" },
+    ],
+  },
 
   runtimeConfig: {
     apiSecret: "",

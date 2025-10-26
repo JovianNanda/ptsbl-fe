@@ -22,7 +22,25 @@
         </div>
         <div class="flex flex-wrap gap-4 justify-center">
           <div class="flex gap-4 flex-1 w-full">
-            <NuxtLink
+            <SmartLink
+              v-for="value in homePageData?.cta_button || []"
+              :key="value?.id + '-' + (value?.cta_button_class || '')"
+              :raw="value?.cta_button_link || '#'"
+              class="flex"
+            >
+              <UButton
+                :class="[
+                  value?.cta_button_class === 'outline-secondary'
+                    ? 'border border-secondary bg-white text-secondary hover:bg-secondary hover:text-white active:bg-secondary'
+                    : 'bg-primary',
+                  'cursor-pointer px-8 py-3 w-auto flex-1 inline-flex justify-center  transition-all items-center ',
+                ]"
+                class="rounded-full"
+              >
+                {{ value?.cta_button_text }} <IconCustom :tags="value?.Icon" />
+              </UButton>
+            </SmartLink>
+            <!-- <NuxtLink
               v-for="value in homePageData?.cta_button || []"
               :key="value?.id + '-' + (value?.cta_button_class || '')"
               :to="value?.cta_button_link || '#'"
@@ -39,7 +57,7 @@
               >
                 {{ value?.cta_button_text }} <IconCustom :tags="value?.Icon" />
               </UButton>
-            </NuxtLink>
+            </NuxtLink> -->
           </div>
         </div>
       </div>
@@ -49,11 +67,15 @@
 <script setup>
 import UBadgeHome from "~/components/BadgeHome.vue";
 import { useHomepageStore } from "~/stores/home";
-
+const { locale } = useI18n();
 const runtimeConfig = useRuntimeConfig();
 const backendBaseUrl = runtimeConfig.public.backendBase;
 const homepage = useHomepageStore();
 await homepage.fetchHomepage();
 
 const homePageData = computed(() => homepage?.data?.data);
+
+watch(locale, () => {
+  homepage.fetchHomepage();
+});
 </script>

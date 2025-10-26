@@ -4,7 +4,7 @@
   >
     <div class="flex flex-row items-center gap-3">
       <div
-        class="bg-secondary-100 p-3 flex flex-col items-center jsutify-center rounded-md text-2xl"
+        class="bg-secondary-100 p-3 flex flex-col items-center justify-center rounded-md text-2xl"
       >
         <IconCustom class="text-secondary" :tags="props.data.icon" />
       </div>

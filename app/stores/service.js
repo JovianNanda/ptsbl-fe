@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { usePreloaderStore } from "~/stores/preloader";
+import { useStrapiLocale } from "~/composables/useStrapiLocale";
 
 export const useServiceStore = defineStore("service", {
   state: () => ({
@@ -10,6 +11,7 @@ export const useServiceStore = defineStore("service", {
 
   actions: {
     async fetchService() {
+      const isoLocale = useStrapiLocale();
       const config = useRuntimeConfig();
       const baseUrl = config.public.apiBase;
       const preloader = usePreloaderStore();
@@ -20,7 +22,7 @@ export const useServiceStore = defineStore("service", {
 
       try {
         const { data, error, pending } = await useFetch(
-          `${baseUrl}/service-section?populate[image_bg]=true&populate[services][populate][image]=true&populate[services][populate][list]=true`,
+          `${baseUrl}/service-section?populate[image_bg]=true&populate[services][populate][image]=true&populate[services][populate][list]=true&locale=${isoLocale.value}`,
           {
             key: "services-store",
             method: "GET",

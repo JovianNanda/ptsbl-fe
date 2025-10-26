@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { usePreloaderStore } from "~/stores/preloader";
+import { useStrapiLocale } from "~/composables/useStrapiLocale";
 
 export const usePrincipleStore = defineStore("principle", {
   state: () => ({
@@ -10,6 +11,7 @@ export const usePrincipleStore = defineStore("principle", {
 
   actions: {
     async fetchPrinciple() {
+      const isoLocale = useStrapiLocale();
       const preloader = usePreloaderStore();
       const config = useRuntimeConfig();
       const baseUrl = config.public.apiBase;
@@ -20,7 +22,7 @@ export const usePrincipleStore = defineStore("principle", {
 
       try {
         const { data, error, pending } = await useFetch(
-          `${baseUrl}/principle-section?populate=*`,
+          `${baseUrl}/principle-section?populate=*&locale=${isoLocale.value}`,
           {
             method: "GET",
             headers: { Accept: "application/json" },
