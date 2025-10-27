@@ -11,7 +11,7 @@
         B3 terbaik
       </p>
 
-      <NuxtLink :href="`https://wa.me/${telp}`" rel="noopener">
+      <NuxtLink :href="`https://wa.me/${telp.trim()}`" rel="noopener">
         <UButton
           color="white"
           variant="solid"
@@ -37,5 +37,5 @@ const contacts = computed(() => {
     ? [...list].sort((a, b) => a.position - b.position)
     : [];
 });
-const telp = (contacts.value[0]?.subtitle || "").replace(/\+/g, "");
+const telp = (contacts.value[0]?.subtitle || "").replace(/[^\d]/g, "");
 </script>
