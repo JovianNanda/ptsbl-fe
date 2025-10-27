@@ -4,23 +4,37 @@
   >
     <div class="flex items-center w-full px-4 lg:px-28 py-3">
       <!-- Logo -->
-      <NuxtLink to="/">
+      <NuxtLink :to="localePath({ name: 'index' })">
         <img src="/images/LogoSBL.png" alt="Logo" class="w-50" />
       </NuxtLink>
 
       <!-- Desktop Nav -->
-      <ul class="w-full justify-end hidden md:flex gap-5 items-center">
+      <ul
+        :key="navKey"
+        class="w-full justify-end hidden md:flex gap-5 items-center"
+      >
         <li v-for="item in navbarItems" :key="item.label">
+          <!-- Section links handled as buttons so we can navigate locale-aware and scroll -->
+          <button
+            v-if="item.section"
+            :class="itemActiveClass(item)"
+            class="text-sm font-normal transition cursor-pointer bg-transparent"
+            @click="() => onNavItemClick(item)"
+          >
+            {{ t(item.label) }}
+          </button>
+
+          <!-- Regular page links use NuxtLink + localePath -->
           <NuxtLink
-            v-if="item.to && !item.isButton"
-            :to="item.to"
+            v-else-if="item.to"
+            :to="localePath(item.to)"
             :class="itemActiveClass(item)"
             class="text-sm font-normal transition cursor-pointer"
-            @click="() => onNavItemClick(item)"
           >
             {{ t(item.label) }}
           </NuxtLink>
 
+          <!-- Button action (WhatsApp) -->
           <button
             v-else-if="item.isButton"
             :class="item.ui?.link || defaultButtonClass"
@@ -30,6 +44,7 @@
             {{ t(item.label) }}
           </button>
 
+          <!-- Fallback span (rare) -->
           <span
             v-else
             :class="itemActiveClass(item)"
@@ -133,7 +148,7 @@
                 </div>
               </div>
 
-              <!-- Regular item -->
+              <!-- Regular item (mobile uses button to control navigation/scroll) -->
               <div v-else class="w-full">
                 <button
                   class="cursor-pointer rounded-md w-full text-left px-3 py-2 text-black hover:text-primary hover:bg-white transition-colors duration-200"
@@ -154,34 +169,17 @@
       </USlideover>
     </div>
   </nav>
-  <button
-    class="fixed bottom-4 right-4 bg-primary text-white px-4 py-2 rounded-full shadow-lg hover:bg-primary-600 transition z-50 uppercase"
-    aria-label="Change language"
-    @click="switchLocale"
-  >
-    {{ localeValue }}
-  </button>
 </template>
 
 <script setup>
 import { useI18n } from "vue-i18n";
-
-import { ref, computed, watch } from "vue";
+import { ref, computed, watch, nextTick } from "vue";
 import { useRoute, useRouter } from "#app";
 import { useContactStore } from "~/stores/contact";
 import { useSectionObserver } from "~/composables/useSectionObserver";
 
-const { locale, t, setLocale } = useI18n();
-
-const localeValue = ref(locale.value);
-
-function switchLocale() {
-  setLocale(locale.value === "en" ? "id" : "en");
-}
-
-watch(locale, (newVal) => {
-  localeValue.value = newVal;
-});
+const { t, locale } = useI18n();
+const localePath = useLocalePath(); // Nuxt i18n helper
 
 // ✅ State
 const isOpen = ref(false);
@@ -195,6 +193,15 @@ function toggleSubmenu(label) {
     [label]: !openSubmenus.value[label],
   };
 }
+
+// Reactive key to force recompute
+const navKey = ref(0);
+
+// ✅ Watch locale updates and force UI refresh AFTER route changes
+watch(locale, async () => {
+  await nextTick();
+  navKey.value++;
+});
 
 // ✅ Contact (WhatsApp)
 const contactStore = useContactStore();
@@ -212,30 +219,39 @@ const { activeSection } = useSectionObserver(["hero", "location", "contact"]);
 watch(
   () => route.path,
   async (newPath) => {
-    if (newPath !== "/") {
-      // Leaving home → clear active section
+    // If not on the index (home) route, clear active section
+    if (route.name !== "index") {
       activeSection.value = null;
-      return;
     }
   },
   { immediate: true }
 );
 
-// ✅ Helper: scroll to section
-async function scrollToSection(section) {
+// Helper: scroll to section
+function scrollToSection(section) {
   const el = document.getElementById(section);
   if (el) {
     el.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 }
 
-// ✅ Navigation data
+// ✅ Navigation data (use route-name objects for localePath)
 const navbarItems = computed(() => [
-  { label: "home", to: "/", section: "hero" },
-  { label: "services", to: "/services" },
-  { label: "about", to: "/about" },
-  { label: "location", to: "/", section: "location" },
-  { label: "contact", to: "/", section: "contact" },
+  { label: "home", to: { name: "index" }, section: "hero", hash: "hero" },
+  { label: "services", to: { name: "services" } },
+  { label: "about", to: { name: "about" } },
+  {
+    label: "location",
+    to: { name: "index" },
+    section: "location",
+    hash: "location",
+  },
+  {
+    label: "contact",
+    to: { name: "index" },
+    section: "contact",
+    hash: "contact",
+  },
   {
     label: "buttonContact",
     isButton: true,
@@ -243,16 +259,17 @@ const navbarItems = computed(() => [
   },
 ]);
 
-// ✅ Decide if an item is currently active
+// Decide if an item is currently active
 function isItemActive(item) {
-  // ✅ If in homepage → use section observer
-  if (route.path === "/" && item.section) {
+  // If item is a section and we're on index page, use activeSection
+  if (item.section && route.name === "index") {
     return activeSection.value === item.section;
   }
 
-  // ✅ If not homepage → use route only
-  if (!item.section && item.to) {
-    return item.to === route.path;
+  // If item has a to (route-name), compare route.name
+  if (item.to && route.name) {
+    // route.name can be a string or object; compare string name
+    return route.name === item.to.name;
   }
 
   return false;
@@ -269,25 +286,42 @@ const mobileItemClass = (item) =>
     : "text-gray-700 p-3 text-left";
 
 async function onNavItemClick(item) {
+  // Button action (WhatsApp)
   if (item.isButton && item.onClick) {
     item.onClick();
     return;
   }
 
-  // ✅ Scroll to section on Home
+  // Section links: navigate locale-aware to index and scroll
   if (item.section) {
-    if (route.path !== "/") {
-      await router.push("/"); // ✅ No navigateTo for in-app routing
+    // Build locale-aware path to index (without hash first)
+    const indexPath = localePath({ name: "index" });
+
+    // If not on index, navigate to it
+    if (route.name !== "index") {
+      await router.push(indexPath);
       await nextTick();
     }
+
+    // after navigation (or if already on index) scroll to section
+    // small delay to ensure DOM ready (if needed)
+    await nextTick();
     scrollToSection(item.section);
     activeSection.value = item.section;
     return;
   }
 
-  // ✅ Normal page navigation
+  // Normal page navigation using localePath
   if (item.to) {
-    router.push(item.to);
+    // include hash if provided
+    const toObj = { ...item.to };
+    if (item.hash) toObj.hash = item.hash;
+
+    const path = localePath(toObj);
+    // Only push when path differs from current
+    if (path !== route.fullPath) {
+      await router.push(path);
+    }
   }
 }
 
