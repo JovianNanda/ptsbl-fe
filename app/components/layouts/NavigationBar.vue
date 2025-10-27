@@ -216,17 +216,6 @@ const Telp = computed(() =>
 // ✅ Active Section Observer (only works on home)
 const { activeSection } = useSectionObserver(["hero", "location", "contact"]);
 
-watch(
-  () => route.path,
-  async (newPath) => {
-    // If not on the index (home) route, clear active section
-    if (route.name !== "index") {
-      activeSection.value = null;
-    }
-  },
-  { immediate: true }
-);
-
 // Helper: scroll to section
 function scrollToSection(section) {
   const el = document.getElementById(section);
