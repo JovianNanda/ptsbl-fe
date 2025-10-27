@@ -4,7 +4,6 @@
     <NuxtLayout>
       <UApp>
         <NuxtPage :key="$route.fullPath" />
-        <LocaleFloat />
       </UApp>
     </NuxtLayout>
   </div>

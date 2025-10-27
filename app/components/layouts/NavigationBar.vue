@@ -9,10 +9,7 @@
       </NuxtLink>
 
       <!-- Desktop Nav -->
-      <ul
-        :key="navKey"
-        class="w-full justify-end hidden md:flex gap-5 items-center"
-      >
+      <ul class="w-full justify-end hidden md:flex gap-5 items-center">
         <li v-for="item in navbarItems" :key="item.label">
           <!-- Section links handled as buttons so we can navigate locale-aware and scroll -->
           <button
@@ -25,14 +22,14 @@
           </button>
 
           <!-- Regular page links use NuxtLink + localePath -->
-          <NuxtLink
+          <NuxtLinkLocale
             v-else-if="item.to"
             :to="localePath(item.to)"
             :class="itemActiveClass(item)"
             class="text-sm font-normal transition cursor-pointer"
           >
             {{ t(item.label) }}
-          </NuxtLink>
+          </NuxtLinkLocale>
 
           <!-- Button action (WhatsApp) -->
           <button
@@ -169,17 +166,19 @@
       </USlideover>
     </div>
   </nav>
+  <LocaleFloat @localeChanged="handleLocaleChange" />
 </template>
 
 <script setup>
 import { useI18n } from "vue-i18n";
-import { ref, computed, watch, nextTick } from "vue";
+import { ref, computed, nextTick } from "vue";
 import { useRoute, useRouter } from "#app";
 import { useContactStore } from "~/stores/contact";
 import { useSectionObserver } from "~/composables/useSectionObserver";
 
-const { t, locale } = useI18n();
+const { locale, t } = useI18n();
 const localePath = useLocalePath(); // Nuxt i18n helper
+const switchLocalePath = useSwitchLocalePath(); // Nuxt i18n helper
 
 // ✅ State
 const isOpen = ref(false);
@@ -194,15 +193,68 @@ function toggleSubmenu(label) {
   };
 }
 
-// Reactive key to force recompute
-const navKey = ref(0);
-
-// ✅ Watch locale updates and force UI refresh AFTER route changes
-watch(locale, async () => {
+async function handleLocaleChange(newLocale) {
+  // small wait to ensure locale.value is updated
   await nextTick();
-  navKey.value++;
-});
 
+  // debug logs (remove when done)
+  console.log(
+    "[locale-change] newLocale:",
+    newLocale,
+    "route.fullPath:",
+    route.fullPath,
+    "locale.value:",
+    locale.value
+  );
+
+  // build the localized path to the current route
+  // prefer switchLocalePath (it returns the path for a locale)
+  let target = null;
+  try {
+    if (typeof switchLocalePath === "function") {
+      // switchLocalePath expects the locale code
+      target = switchLocalePath(newLocale);
+    }
+  } catch (e) {
+    console.warn(
+      "[locale-change] switchLocalePath failed, fallback to localePath",
+      e
+    );
+  }
+
+  // fallback if switchLocalePath not available or returned falsy
+  if (!target) {
+    // use route name/params/hash to recompute localized path
+    target = localePath({
+      name: route.name,
+      params: route.params,
+      hash: route.hash,
+    });
+  }
+
+  console.log("[locale-change] computed target:", target);
+
+  // update cookie again just in case
+  document.cookie = `i18n_redirected=${newLocale}; path=/`;
+
+  // only replace if different
+  if (target && target !== route.fullPath) {
+    // replace avoids adding extra history entry
+    await router.replace(target);
+    // small tick to allow hydration updates
+    await nextTick();
+    console.log(
+      "[locale-change] route replaced ->",
+      router.currentRoute.value.fullPath
+    );
+    // force navKey recompute so links re-render (you already had navKey logic)
+    navKey.value++;
+  } else {
+    console.log("[locale-change] no route change needed");
+    // still bump navKey to be safe
+    navKey.value++;
+  }
+}
 // ✅ Contact (WhatsApp)
 const contactStore = useContactStore();
 await contactStore.fetchContact();

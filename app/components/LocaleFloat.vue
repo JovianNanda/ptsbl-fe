@@ -1,24 +1,28 @@
+<!-- components/LocaleFloat.vue -->
 <template>
   <button
     class="fixed bottom-4 right-4 bg-primary text-white px-4 py-2 rounded-full shadow-lg hover:bg-primary-600 transition z-50 uppercase cursor-pointer"
     aria-label="Change language"
-    @click="switchLocale"
+    @click="onSwitchLocale"
   >
-    {{ localeValue }}
+    {{ locale }}
   </button>
 </template>
+
 <script setup>
 import { useI18n } from "vue-i18n";
+const emit = defineEmits(["localeChanged"]);
 
 const { locale, setLocale } = useI18n();
 
-const localeValue = ref(locale.value);
+function onSwitchLocale() {
+  const newLocale = locale.value === "en" ? "id" : "en";
+  setLocale(newLocale);
 
-function switchLocale() {
-  setLocale(locale.value === "en" ? "id" : "en");
+  // set the cookie so server / detectBrowserLanguage sees the new value
+  document.cookie = `i18n_redirected=${newLocale}; path=/`;
+
+  // emit to parent (NavBar)
+  emit("localeChanged", newLocale);
 }
-
-watch(locale, (newVal) => {
-  localeValue.value = newVal;
-});
 </script>
