@@ -12,11 +12,20 @@
         <!-- Brand -->
         <div>
           <div class="flex items-center gap-2 mb-3">
-            <img src="/images/LogoSBL.png" alt="" srcset="" />
+            <img :src="firstImgFooter" alt="" srcset="" />
           </div>
           <p class="text-gray-200 text-sm leading-relaxed">
-            Pengelolaan limbah B3 terpercaya untuk Indonesia
+            {{ homepageData?.hero_title }}
           </p>
+          <div class="flex">
+            <img
+              v-for="value in globalData.value?.data.images || []"
+              :key="value.id"
+              class="max-w-5xl"
+              :src="`${backendBaseUrl}${value.url}`"
+              alt=""
+            />
+          </div>
         </div>
 
         <!-- Quick Links -->
@@ -101,8 +110,16 @@
   </footer>
 </template>
 <script setup>
-import { useContactStore } from "~/stores/contact";
+import { useGlobalStore } from "~/stores/global";
 import { useRouter } from "vue-router";
+
+const homepageStore = useHomepageStore();
+await homepageStore.fetchHomepage();
+const homepageData = computed(() => homepageStore?.data.data);
+
+const globalStore = useGlobalStore();
+await globalStore.fetchGlobal();
+const globalData = computed(() => globalStore?.data);
 
 const contactStore = useContactStore();
 await contactStore.fetchContact();
@@ -113,6 +130,8 @@ const contacts = computed(() => {
     ? [...list].sort((a, b) => a.position - b.position)
     : [];
 });
+const backendBaseUrl = useRuntimeConfig().public.backendBase;
+const firstImgFooter = `${backendBaseUrl}${globalData.value?.data.images?.[0]?.url}`;
 
 const router = useRouter();
 

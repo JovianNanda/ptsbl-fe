@@ -10,10 +10,13 @@
       <p class="text-center text-gray-500 mt-4 text-lg">
         {{ allAdvantages?.subtitle }}
       </p>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-18 mx-auto">
+      <div
+        class="flex flex-wrap gap-8 mt-18 mx-auto items-center justify-center"
+      >
         <AdvantageCard
           v-for="advantage in advantages ?? []"
           :key="advantage.id"
+          class="basis-1/3"
           :advantage="advantage"
         />
       </div>

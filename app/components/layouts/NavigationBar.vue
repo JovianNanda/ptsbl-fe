@@ -232,8 +232,6 @@ async function handleLocaleChange(newLocale) {
     });
   }
 
-  console.log("[locale-change] computed target:", target);
-
   // update cookie again just in case
   document.cookie = `i18n_redirected=${newLocale}; path=/`;
 
