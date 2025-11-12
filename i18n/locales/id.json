@@ -4,5 +4,12 @@
   "services": "Layanan",
   "contact": "Kontak",
   "location": "Lokasi",
-  "buttonContact": "Hubungi Kami"
+  "buttonContact": "Hubungi Kami",
+
+  "serviceCTA": {
+    "title": "Butuh Konsultasi untuk Kebutuhan Anda?",
+    "description": "Tim ahli kami siap membantu Anda menemukan solusi terbaik untuk pengelolaan limbah B3 perusahaan Anda.",
+    "buttonText": "Hubungi",
+    "buttonLink": "Email kami"
+  }
 }

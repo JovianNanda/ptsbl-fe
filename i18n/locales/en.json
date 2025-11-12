@@ -4,5 +4,12 @@
   "services": "Services",
   "contact": "Contact",
   "location": "Location",
-  "buttonContact": "Contact Us"
+  "buttonContact": "Contact Us",
+
+  "serviceCTA": {
+    "title": "Need a Consultation for Your Needs?",
+    "description": "Our team of experts is ready to help you find the best solution for your company's B3 waste management.",
+    "buttonText": "Get in touch",
+    "buttonLink": "Our Email"
+  }
 }
