@@ -97,6 +97,45 @@ import { useJourneyStore } from "/stores/journey";
 import AdvantageCard from "~/components/advantage/AdvantageCard.vue";
 import PartnerSection from "~/components/sections/PartnerSection.vue";
 
+useHead({
+  title: "Tentang Kami – PT Sarana Bumi Lestari",
+  link: [
+    {
+      rel: "canonical",
+      href: "https://saranabumilestari.com/about",
+    },
+    {
+      rel: "alternate",
+      href: "https://saranabumilestari.com/about",
+      hreflang: "id",
+    },
+  ],
+  meta: [
+    {
+      name: "description",
+      content:
+        "PT Sarana Bumi Lestari adalah perusahaan pengelolaan Limbah B3 yang berizin, profesional, dan berkomitmen terhadap keberlanjutan lingkungan sejak 2020.",
+    },
+    {
+      name: "keywords",
+      content:
+        "Tentang SBL, Profil Perusahaan B3, Sarana Bumi Lestari, Pengelola Limbah B3, Perusahaan Lingkungan Indonesia",
+    },
+    { property: "og:type", content: "website" },
+    { property: "og:url", content: "https://saranabumilestari.com/about" },
+    {
+      property: "og:image",
+      content: "https://saranabumilestari.com/images/logoSBL_2.png",
+    },
+
+    { name: "twitter:card", content: "summary_large_image" },
+    {
+      name: "twitter:image",
+      content: "https://saranabumilestari.com/images/LogoSBL.png",
+    },
+  ],
+});
+
 const preloader = usePreloaderStore();
 
 preloader.show();

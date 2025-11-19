@@ -56,9 +56,10 @@
             :items="images"
             class="w-full h-full object-cover fleet-carousel aspect-[4/5] relative"
           >
-            <img
+            <NuxtImg
               :src="item"
               class="w-full h-full object-cover items-stretch !object-center block aspect-[4/5]"
+              loading="lazy"
             />
           </UCarousel>
         </div>

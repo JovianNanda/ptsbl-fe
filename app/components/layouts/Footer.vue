@@ -12,7 +12,12 @@
         <!-- Brand -->
         <div>
           <div class="flex items-center gap-2 mb-3">
-            <img :src="firstImgFooter" alt="" srcset="" />
+            <NuxtImg
+              :src="firstImgFooter"
+              alt="PT Sarana Bumi Lestari"
+              class="w-32 h-auto"
+              loading="lazy"
+            />
           </div>
           <p class="text-gray-200 text-sm leading-relaxed">
             {{ homepageData?.hero_title }}

@@ -21,6 +21,7 @@
         class="w-full h-full group-hover:scale-105 object-cover max-w-3xl transition-all rounded-t-3xl"
         quality="80"
         format="webp"
+        loading="lazy"
       />
     </template>
     <template #body>

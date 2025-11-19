@@ -5,7 +5,13 @@
     <div class="flex items-center w-full px-4 lg:px-28 py-3">
       <!-- Logo -->
       <NuxtLink :to="localePath({ name: 'index' })">
-        <img src="/images/LogoSBL.png" alt="Logo" class="w-50" />
+        <NuxtImg
+          :src="`/images/LogoSBL.png`"
+          alt="PT Sarana Bumi Lestari"
+          class="w-50 h-auto"
+          loading="lazy"
+        />
+        <!-- <img src="/images/LogoSBL.png" alt="Logo" class="w-50" /> -->
       </NuxtLink>
 
       <!-- Desktop Nav -->
@@ -93,7 +99,13 @@
         </div>
 
         <template #title>
-          <img src="/images/LogoSBL.png" alt="Logo" class="w-40" />
+          <NuxtImg
+            :src="`/images/LogoSBL.png`"
+            alt="PT Sarana Bumi Lestari"
+            class="w-40 h-auto"
+            loading="lazy"
+          />
+          <!-- <img src="/images/LogoSBL.png" alt="Logo" class="w-40" /> -->
         </template>
 
         <template #body>

@@ -23,6 +23,7 @@
           :src="backendBaseUrl + props?.data?.image?.url"
           :alt="props?.data?.title"
           class="w-full h-82 lg:h-[35rem] rounded-2xl object-cover"
+          loading="lazy"
         />
         <div
           v-if="props?.data?.icon"

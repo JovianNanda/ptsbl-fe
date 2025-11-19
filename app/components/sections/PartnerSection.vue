@@ -17,6 +17,8 @@
           :key="value?.id"
           :src="backendBaseUrl + value?.url"
           class="m-4 object-contain hover:scale-105 transition-all size-40 shrink-0"
+          :alt="value?.name"
+          loading="lazy"
         />
       </UMarquee>
 

@@ -46,6 +46,45 @@ import { useServiceStore } from "~/stores/service";
 import { usePreloaderStore } from "~/stores/preloader";
 import CallToAction from "~/components/service/CallToAction.vue";
 
+useHead({
+  title: "Layanan Pengelolaan Limbah B3 – PT Sarana Bumi Lestari",
+  link: [
+    {
+      rel: "canonical",
+      href: "https://saranabumilestari.com/services",
+    },
+    {
+      rel: "alternate",
+      href: "https://saranabumilestari.com/services",
+      hreflang: "id",
+    },
+  ],
+  meta: [
+    {
+      name: "description",
+      content:
+        "Kami menyediakan layanan pengangkutan Limbah B3, pengumpulan, pengolahan, dan konsultasi sesuai regulasi dan standar K3.",
+    },
+    {
+      name: "keywords",
+      content:
+        "Jasa Limbah B3, Pengangkutan Limbah B3, Pengolahan B3, Konsultasi B3",
+    },
+    { property: "og:type", content: "website" },
+    { property: "og:url", content: "https://saranabumilestari.com/services" },
+    {
+      property: "og:image",
+      content: "https://saranabumilestari.com/images/logoSBL_2.png",
+    },
+
+    { name: "twitter:card", content: "summary_large_image" },
+    {
+      name: "twitter:image",
+      content: "https://saranabumilestari.com/images/LogoSBL.png",
+    },
+  ],
+});
+
 const preloader = usePreloaderStore();
 
 preloader.show();

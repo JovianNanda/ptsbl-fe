@@ -3,6 +3,41 @@ export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   devtools: { enabled: true },
   components: true,
+  ssr: true,
+
+  nitro: {
+    routeRules: {
+      "/**": { swr: true },
+    },
+  },
+
+  app: {
+    head: {
+      link: [
+        {
+          rel: "icon",
+          type: "image/x-icon",
+          href: "/favicon.ico",
+        },
+      ],
+      meta: [
+        {
+          name: "viewport",
+          content: "width=device-width, initial-scale=1",
+        },
+        {
+          name: "author",
+          content: "PT. Sumber Bumi Lestari",
+        },
+        {
+          name: "description",
+          content:
+            "PT Sarana Bumi Lestari menyediakan layanan pengangkutan, pengumpulan, dan pengelolaan Limbah B3 yang aman, berizin, dan terintegrasi di Indonesia.",
+        },
+      ],
+    },
+  },
+
   modules: [
     "@nuxt/eslint",
     "@nuxt/image",
@@ -11,8 +46,20 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "nuxt-aos",
     "@nuxtjs/i18n",
+    "@nuxtjs/sitemap",
+    "nuxt-simple-robots",
   ],
 
+  robots: {
+    sitemap: "https://saranabumilestari.com/sitemap.xml",
+    allow: "/",
+    disallow: ["/admin", "/dashboard"],
+  },
+
+  sitemap: {
+    hostname: "https://saranabumilestari.com",
+    gzip: true,
+  },
   css: ["~/assets/css/main.css"],
 
   i18n: {
