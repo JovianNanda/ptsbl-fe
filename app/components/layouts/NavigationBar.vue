@@ -275,28 +275,28 @@ function scrollToSection(section) {
 }
 
 // ✅ Navigation data (use route-name objects for localePath)
-const navbarItems = computed(() => [
-  { label: "home", to: { name: "index" }, section: "hero", hash: "hero" },
-  { label: "services", to: { name: "services" } },
-  { label: "about", to: { name: "about" } },
-  {
-    label: "location",
-    to: { name: "index" },
-    section: "location",
-    hash: "location",
-  },
-  {
-    label: "contact",
-    to: { name: "index" },
-    section: "contact",
-    hash: "contact",
-  },
-  {
-    label: "buttonContact",
-    isButton: true,
-    onClick: () => window.open(`https://wa.me/${Telp.value.trim()}`, "_blank"),
-  },
-]);
+// const navbarItems = computed(() => [
+//   { label: "home", to: { name: "index" }, section: "hero", hash: "hero" },
+//   { label: "services", to: { name: "services" } },
+//   { label: "about", to: { name: "about" } },
+//   {
+//     label: "location",
+//     to: { name: "index" },
+//     section: "location",
+//     hash: "location",
+//   },
+//   {
+//     label: "contact",
+//     to: { name: "index" },
+//     section: "contact",
+//     hash: "contact",
+//   },
+//   {
+//     label: "buttonContact",
+//     isButton: true,
+//     onClick: () => window.open(`https://wa.me/${Telp.value.trim()}`, "_blank"),
+//   },
+// ]);
 
 // Decide if an item is currently active
 function isItemActive(item) {
@@ -313,6 +313,34 @@ function isItemActive(item) {
 
   return false;
 }
+const navbarItems = computed(() => {
+  // force dependency pada locale agar reaktif
+  const _ = locale.value;
+
+  return [
+    { label: "home", to: { name: "index" }, section: "hero", hash: "hero" },
+    { label: "services", to: { name: "services" } },
+    { label: "about", to: { name: "about" } },
+    {
+      label: "location",
+      to: { name: "index" },
+      section: "location",
+      hash: "location",
+    },
+    {
+      label: "contact",
+      to: { name: "index" },
+      section: "contact",
+      hash: "contact",
+    },
+    {
+      label: "buttonContact",
+      isButton: true,
+      onClick: () =>
+        window.open(`https://wa.me/${Telp.value.trim()}`, "_blank"),
+    },
+  ];
+});
 
 const itemActiveClass = (item) =>
   isItemActive(item)

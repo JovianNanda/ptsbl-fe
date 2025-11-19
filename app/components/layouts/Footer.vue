@@ -18,13 +18,13 @@
             {{ homepageData?.hero_title }}
           </p>
           <div class="flex">
-            <img
-              v-for="value in globalData.value?.data.images || []"
+            <!-- <img
+              v-for="value in globalData?.data.images || []"
               :key="value.id"
               class="max-w-5xl"
               :src="`${backendBaseUrl}${value.url}`"
               alt=""
-            />
+            /> -->
           </div>
         </div>
 
@@ -115,11 +115,11 @@ import { useRouter } from "vue-router";
 
 const homepageStore = useHomepageStore();
 await homepageStore.fetchHomepage();
-const homepageData = computed(() => homepageStore?.data.data);
+const homepageData = computed(() => homepageStore?.data);
 
 const globalStore = useGlobalStore();
 await globalStore.fetchGlobal();
-const globalData = computed(() => globalStore?.data);
+// const globalData = computed(() => globalStore?.data);
 
 const contactStore = useContactStore();
 await contactStore.fetchContact();
@@ -130,8 +130,8 @@ const contacts = computed(() => {
     ? [...list].sort((a, b) => a.position - b.position)
     : [];
 });
-const backendBaseUrl = useRuntimeConfig().public.backendBase;
-const firstImgFooter = `${backendBaseUrl}${globalData.value?.data.images?.[0]?.url}`;
+// const backendBaseUrl = useRuntimeConfig().public.backendBase;
+// const firstImgFooter = `${backendBaseUrl}${globalData?.images?.[0]?.url}`;
 
 const router = useRouter();
 
