@@ -9,8 +9,7 @@
         <!-- <IconCustom class="text-secondary" :tags="props.data.icon" /> -->
          <BackendIcon
            :icon="props.data.icon"
-           :data="props.data"
-           :class-name="'text-secondary'"/>
+           :class-name="'text-secondary w-6 h-6'"/>
       </div>
       <h1 class="text-black">{{ props.data.title }}</h1>
     </div>

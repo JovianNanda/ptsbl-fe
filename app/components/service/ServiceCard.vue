@@ -16,7 +16,6 @@
         /> -->
         <BackendIcon
           :icon="props.service.icon"
-          :data="props.service"
           class="e"
           :class-name="
             (props.service.position % 2 === 0 ? 'bg-primary' : 'bg-secondary') +

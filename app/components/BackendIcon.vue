@@ -7,6 +7,7 @@
     :color="props.tags.color"
   /> -->
   <svg 
+  :key="props.icon.iconName"
      xmlns="http://www.w3.org/2000/svg"
      :viewBox="`0 0 ${props.icon.width} ${props.icon.height}`"
      fill="none"
@@ -27,7 +28,6 @@ const props = defineProps({
   icon: {
     type: Object,
     default: () => ({}),
-
     iconData: {
       type: String,
       required: false,
@@ -38,11 +38,16 @@ const props = defineProps({
       required: false,
       default: '',
     },
-  },
-  data: {
-    type: Object,
-    required: false,
-    default: () => ({}),
+    width: {
+      type: [String, Number],
+      required: false,
+      default: 16,
+    },
+    height: {
+      type: [String, Number],
+      required: false,
+      default: 16,
+    },
   },
 });
 

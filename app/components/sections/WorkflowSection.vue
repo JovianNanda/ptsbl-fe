@@ -36,7 +36,6 @@
               /> -->
               <BackendIcon
                 :icon="item?.icon"
-                :data="item"
                 :class-name="'w-7 h-7'"
               />
             </div>
@@ -80,7 +79,6 @@
                 /> -->
                 <BackendIcon
                   :icon="item?.icon"
-                  :data="item"
                   :class-name="'w-8 h-8'"
                   />
               </div>

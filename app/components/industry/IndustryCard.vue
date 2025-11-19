@@ -6,7 +6,6 @@
       <!-- <IconCustom :tags="props.industry.icon" class="w-8 h-8 text-white" /> -->
        <BackendIcon
          :icon="props.industry.icon"
-         :data="props.industry"
          :class-name="'w-8 h-8 text-white'"/>
     </div>
     <p class="text-center text-black text-base">

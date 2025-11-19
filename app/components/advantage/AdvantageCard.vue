@@ -20,7 +20,7 @@
           <!-- <IconCustom :tags="props.advantage.icon" width="38" height="38" /> -->
           <BackendIcon
             :icon="props.advantage.icon"
-            :data="props.advantage"
+            :class-name="'w-9 h-9 text-white'"
           />
         </div>
         <div class="flex gap-2 flex-col pt-6 pb-2 flex-1">

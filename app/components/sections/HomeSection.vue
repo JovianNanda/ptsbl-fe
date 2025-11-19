@@ -42,11 +42,11 @@
                   class="rounded-full"
                 >
                   {{ value?.cta_button_text }}
-                  <!-- <IconCustom :tags="value?.Icon" /> -->
-                   <BackendIcon
+                  <IconCustom :tags="value?.Icon" />
+                   <!-- <BackendIcon
                      :icon="value?.Icon"
                      :data="value"
-                     :class-name="''"/>
+                     :class-name="''"/> -->
                 </UButton>
               </SmartLink>
               <!-- <NuxtLink

@@ -35,9 +35,8 @@
             /> -->
             <BackendIcon
               :icon="stats?.icon"
-              :data="stats"
               :class-name="
-                stats?.position % 2 === 0 ? 'text-secondary' : 'text-primary'
+                (stats?.position % 2 === 0 ? 'text-secondary' : 'text-primary' ) + ' w-7 h-7'
               "/>
 
             <h1 class="text-black text-xl">

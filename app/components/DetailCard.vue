@@ -39,7 +39,6 @@
           /> -->
           <BackendIcon
             :icon="props?.data?.icon"
-            :data="props?.data"
             :class-name="'text-white w-8 h-8'"
           />
         </div>

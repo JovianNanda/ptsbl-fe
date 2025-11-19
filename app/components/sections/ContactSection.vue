@@ -32,7 +32,6 @@
               <!-- <IconCustom :tags="value?.icon" class="w-8 h-8 text-white" /> -->
                <BackendIcon
                   :icon="value?.icon"
-                  :data="value"
                   :class-name="'w-8 h-8 text-white'"/>
             </div>
             <div class="flex-col">
