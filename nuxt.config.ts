@@ -1,5 +1,4 @@
 // https://nuxt.com/docs/api/configuration/nuxt-con
-import Remove from "unplugin-remove/vite";
 
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
@@ -11,17 +10,6 @@ export default defineNuxtConfig({
       "/**": { swr: true },
     },
     preset: "vercel",
-  },
-
-  vite: {
-    plugins:
-      process.env.NODE_ENV === "production"
-        ? [
-            Remove({
-              exclude: ["console.log", "console.debug", "console.warn"],
-            }),
-          ]
-        : [],
   },
 
   app: {
@@ -65,7 +53,7 @@ export default defineNuxtConfig({
 
   robots: {
     sitemap: `${process.env.NUXT_SITE_URL}/sitemap.xml`,
-    allow: "/",
+    allow: ["/", "/about", "/services", "/contact", "/api"],
     disallow: ["/admin", "/dashboard"],
   },
 

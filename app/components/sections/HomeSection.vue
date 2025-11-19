@@ -4,7 +4,7 @@
   }}</span>
   <section
     class="min-h-screen bg-cover bg-center"
-    :style="`background-image: url('${backendBaseUrl}${homePageData?.hero_bg_image?.url}')`"
+    :style="`background-image: url('${imgUrl}')`"
   >
     <div
       class="backdrop-brightness-40 flex items-center justify-center h-screen"
@@ -77,6 +77,9 @@ const homepage = useHomepageStore();
 await homepage.fetchHomepage();
 
 const homePageData = computed(() => homepage?.data?.data);
+const imgUrl = computed(() => {
+  return `${backendBaseUrl}${homePageData.value?.hero_bg_image?.url}`;
+});
 watch(locale, () => {
   homepage.fetchHomepage();
 });
