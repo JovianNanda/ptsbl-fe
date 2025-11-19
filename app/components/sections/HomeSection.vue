@@ -1,4 +1,7 @@
 <template>
+  <span style="display: none; color: white">{{
+    homePageData?.hero_bg_image?.url
+  }}</span>
   <section
     class="min-h-screen bg-cover bg-center"
     :style="`background-image: url('${backendBaseUrl}${homePageData?.hero_bg_image?.url}')`"
@@ -74,7 +77,6 @@ const homepage = useHomepageStore();
 await homepage.fetchHomepage();
 
 const homePageData = computed(() => homepage?.data?.data);
-
 watch(locale, () => {
   homepage.fetchHomepage();
 });

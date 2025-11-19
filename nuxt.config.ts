@@ -1,15 +1,27 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
+// https://nuxt.com/docs/api/configuration/nuxt-con
+import Remove from "unplugin-remove/vite";
+
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   devtools: { enabled: true },
   components: true,
   ssr: true,
-
   nitro: {
     routeRules: {
       "/**": { swr: true },
     },
     preset: "vercel",
+  },
+
+  vite: {
+    plugins:
+      process.env.NODE_ENV === "production"
+        ? [
+            Remove({
+              exclude: ["console.log", "console.debug", "console.warn"],
+            }),
+          ]
+        : [],
   },
 
   app: {
@@ -39,28 +51,14 @@ export default defineNuxtConfig({
     },
   },
 
-  modules: [
-    "@nuxt/eslint",
-    "@nuxt/image",
-    "@nuxt/scripts",
-    "@nuxt/ui",
-    "@pinia/nuxt",
-    "nuxt-aos",
-    "@nuxtjs/i18n",
-    "@nuxtjs/sitemap",
-    "nuxt-simple-robots",
-  ],
+  modules: ["@nuxt/eslint", "@nuxt/image", "@nuxt/scripts", "@nuxt/ui", "@pinia/nuxt", "nuxt-aos", "@nuxtjs/i18n", "@nuxtjs/sitemap", "@nuxtjs/robots", "nuxt-site-config"],
 
   robots: {
-    sitemap: "https://saranabumilestari.com/sitemap.xml",
+    sitemap: `${process.env.NUXT_SITE_URL}/sitemap.xml`,
     allow: "/",
     disallow: ["/admin", "/dashboard"],
   },
 
-  sitemap: {
-    hostname: "https://saranabumilestari.com",
-    gzip: true,
-  },
   css: ["~/assets/css/main.css"],
 
   i18n: {
@@ -76,9 +74,25 @@ export default defineNuxtConfig({
   runtimeConfig: {
     apiSecret: "",
     public: {
+      siteUrl: process.env.NUXT_SITE_URL || "http://localhost:3000",
+      siteName: process.env.NUXT_SITE_NAME || "PT Sarana Bumi Lestari",
       apiBase: process.env.NUXT_PUBLIC_API_BASE || "http://localhost:1337/api",
       backendBase:
         process.env.NUXT_PUBLIC_BACKEND_BASE || "http://localhost:1337",
+    },
+  },
+
+  sitemap: {
+    sitemaps: {
+      default: {
+        sitemapName: "sitemap.xml",
+        urls: [
+          { loc: "/" },
+          { loc: "/about" },
+          { loc: "/services" },
+          { loc: "/contact" },
+        ],
+      },
     },
   },
 
