@@ -1,5 +1,4 @@
 <template>
-  <ClientOnly>
   <!-- <Icon
     v-if="props.tags && props.tags.iconName"
     :icon="props.tags.iconName"
@@ -16,7 +15,6 @@
      :class="className"
      v-html="props.icon.iconData"
   />
-  </ClientOnly>
 </template>
 
 <script setup>
