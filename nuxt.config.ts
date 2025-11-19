@@ -9,6 +9,7 @@ export default defineNuxtConfig({
     routeRules: {
       "/**": { swr: true },
     },
+    preset: "vercel",
   },
 
   app: {
