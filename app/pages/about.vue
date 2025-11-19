@@ -134,6 +134,29 @@ useHead({
       content: "https://saranabumilestari.com/images/LogoSBL.png",
     },
   ],
+
+    script: [
+    {
+      type: "application/ld+json",
+      children: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        name: "PT Sarana Bumi Lestari",
+        url: "https://saranabumilestari.com",
+        logo: "https://saranabumilestari.com/images/logoSBL_2.png",
+        contactPoint: {
+          "@type": "ContactPoint",
+          telephone: "+62-811-3080-8778",
+          contactType: "customer service",
+        },
+        sameAs: [
+          "https://www.facebook.com/saranabumilestari",
+          "https://www.instagram.com/saranabumilestari/",
+          "https://www.linkedin.com/company/pt-sarana-bumi-lestari/",
+        ],
+      }),
+    },
+  ],
 });
 
 const preloader = usePreloaderStore();

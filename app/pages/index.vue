@@ -76,6 +76,11 @@ useHead({
           telephone: "+62-811-3080-8778",
           contactType: "customer service",
         },
+        sameAs: [
+          "https://www.facebook.com/saranabumilestari",
+          "https://www.instagram.com/saranabumilestari/",
+          "https://www.linkedin.com/company/pt-sarana-bumi-lestari/",
+        ],
       }),
     },
   ],
