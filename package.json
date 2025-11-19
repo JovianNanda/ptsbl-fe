@@ -10,6 +10,9 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@iconify-json/icomoon-free": "^1.2.1",
+    "@iconify-json/ri": "^1.2.6",
+    "@iconify-json/si": "^1.2.15",
     "@nuxt/eslint": "^1.9.0",
     "@nuxt/image": "^1.11.0",
     "@nuxt/scripts": "^0.13.0",

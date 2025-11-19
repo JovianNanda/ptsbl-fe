@@ -1,4 +1,5 @@
 <template>
+  <ClientOnly>
   <Icon
     v-if="props.tags && props.tags.iconName"
     :icon="props.tags.iconName"
@@ -6,6 +7,7 @@
     :height="props.tags.height || 16"
     :color="props.tags.color"
   />
+  </ClientOnly>
 </template>
 
 <script setup>
