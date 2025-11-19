@@ -10,8 +10,8 @@
      xmlns="http://www.w3.org/2000/svg"
      :viewBox="`0 0 ${props.icon.width} ${props.icon.height}`"
      fill="none"
-     :width="props.icon.width"
-     :height="props.icon.height"
+     :width="props.icon.width ?? 16"
+     :height="props.icon.height ?? 16"
      :class="className"
      v-html="props.icon.iconData"
   />
