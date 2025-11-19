@@ -17,7 +17,11 @@
             index % 2 === 0 ? 'bg-secondary' : 'bg-primary' ?? 'bg-secondary'
           "
         >
-          <IconCustom :tags="props.advantage.icon" width="38" height="38" />
+          <!-- <IconCustom :tags="props.advantage.icon" width="38" height="38" /> -->
+          <BackendIcon
+            :icon="props.advantage.icon"
+            :data="props.advantage"
+          />
         </div>
         <div class="flex gap-2 flex-col pt-6 pb-2 flex-1">
           <h1 class="text-xl text-black font-light">

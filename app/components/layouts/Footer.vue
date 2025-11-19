@@ -13,7 +13,7 @@
         <div>
           <div class="flex items-center gap-2 mb-3">
             <NuxtImg
-              :src="firstImgFooter"
+              :src="`/images/LogoSBL.png`"
               alt="PT Sarana Bumi Lestari"
               class="w-32 h-auto"
               loading="lazy"
@@ -124,7 +124,7 @@ const homepageData = computed(() => homepageStore?.data);
 
 const globalStore = useGlobalStore();
 await globalStore.fetchGlobal();
-// const globalData = computed(() => globalStore?.data);
+const globalData = computed(() => globalStore?.data);
 
 const contactStore = useContactStore();
 await contactStore.fetchContact();
@@ -135,8 +135,8 @@ const contacts = computed(() => {
     ? [...list].sort((a, b) => a.position - b.position)
     : [];
 });
-// const backendBaseUrl = useRuntimeConfig().public.backendBase;
-// const firstImgFooter = `${backendBaseUrl}${globalData?.images?.[0]?.url}`;
+const backendBaseUrl = useRuntimeConfig().public.backendBase;
+const firstImgFooter = `${backendBaseUrl}${globalData?.value.images?.[0]?.url}`;
 
 const router = useRouter();
 

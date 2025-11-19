@@ -25,14 +25,20 @@
             :key="stats?.id"
             class="mx-4 text-center justify-center flex flex-col items-center gap-2"
           >
-            <IconCustom
+            <!-- <IconCustom
               :tags="stats?.icon"
               width="28"
               height="28"
               :class="
                 stats?.position % 2 === 0 ? 'text-secondary' : 'text-primary'
               "
-            />
+            /> -->
+            <BackendIcon
+              :icon="stats?.icon"
+              :data="stats"
+              :class-name="
+                stats?.position % 2 === 0 ? 'text-secondary' : 'text-primary'
+              "/>
 
             <h1 class="text-black text-xl">
               <AnimatedNumber :target="stats?.value" :duration="1500" />

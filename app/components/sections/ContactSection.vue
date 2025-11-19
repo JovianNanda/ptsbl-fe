@@ -29,7 +29,11 @@
                   : 'bg-gradient-to-tr  to-[#3B82F6] from-[#155DFC]'
               "
             >
-              <IconCustom :tags="value?.icon" class="w-8 h-8 text-white" />
+              <!-- <IconCustom :tags="value?.icon" class="w-8 h-8 text-white" /> -->
+               <BackendIcon
+                  :icon="value?.icon"
+                  :data="value"
+                  :class-name="'w-8 h-8 text-white'"/>
             </div>
             <div class="flex-col">
               <h4 class="font-medium text-gray-800">{{ value?.title }}</h4>

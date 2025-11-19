@@ -6,7 +6,11 @@
       <div
         class="bg-secondary-100 p-3 flex flex-col items-center justify-center rounded-md text-2xl"
       >
-        <IconCustom class="text-secondary" :tags="props.data.icon" />
+        <!-- <IconCustom class="text-secondary" :tags="props.data.icon" /> -->
+         <BackendIcon
+           :icon="props.data.icon"
+           :data="props.data"
+           :class-name="'text-secondary'"/>
       </div>
       <h1 class="text-black">{{ props.data.title }}</h1>
     </div>

@@ -30,9 +30,14 @@
               v-if="item"
               class="w-16 h-16 flex hover:scale-110 transition items-center justify-center rounded-full text-white bg-primary z-10"
             >
-              <IconCustom
+              <!-- <IconCustom
                 :tags="item?.icon"
                 style="width: 28px; height: 28px"
+              /> -->
+              <BackendIcon
+                :icon="item?.icon"
+                :data="item"
+                :class-name="'w-7 h-7'"
               />
             </div>
 
@@ -69,10 +74,15 @@
                 v-if="item"
                 class="w-20 h-20 flex hover:scale-110 hover:filter-[brightness(1.2)] transition items-center justify-center rounded-full text-white bg-primary z-10"
               >
-                <IconCustom
+                <!-- <IconCustom
                   :tags="item?.icon"
                   style="width: 32px; height: 32px"
-                />
+                /> -->
+                <BackendIcon
+                  :icon="item?.icon"
+                  :data="item"
+                  :class-name="'w-8 h-8'"
+                  />
               </div>
               <h3 class="font-normal text-sm text-black mt-4">
                 {{ item?.title }}

@@ -6,13 +6,21 @@
   >
     <template #header>
       <div class="absolute z-10 top-4 left-4">
-        <IconCustom
+        <!-- <IconCustom
           :tags="props.service.icon"
           class="w-12 h-12 p-2 rounded-2xl"
           style="color: white !important"
           :class="
             props.service.position % 2 === 0 ? 'bg-primary' : 'bg-secondary'
           "
+        /> -->
+        <BackendIcon
+          :icon="props.service.icon"
+          :data="props.service"
+          class="e"
+          :class-name="
+            (props.service.position % 2 === 0 ? 'bg-primary' : 'bg-secondary') +
+            ' w-12 h-12 p-2 rounded-2xl text-white'"
         />
       </div>
       <NuxtImg

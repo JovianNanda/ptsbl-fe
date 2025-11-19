@@ -30,12 +30,17 @@
           class="absolute top-4 left-4 p-3 rounded-xl shadow-md flex items-center justify-center"
           :class="index % 2 === 0 ? 'bg-primary' : 'bg-secondary'"
         >
-          <IconCustom
+          <!-- <IconCustom
             :tags="props?.data?.icon"
             class="text-white"
             style="color: #ffff"
             width="32"
             height="32"
+          /> -->
+          <BackendIcon
+            :icon="props?.data?.icon"
+            :data="props?.data"
+            :class-name="'text-white w-8 h-8'"
           />
         </div>
       </div>
