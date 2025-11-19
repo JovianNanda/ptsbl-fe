@@ -51,7 +51,17 @@ export default defineNuxtConfig({
     },
   },
 
-  modules: ["@nuxt/eslint", "@nuxt/image", "@nuxt/scripts", "@nuxt/ui", "@pinia/nuxt", "nuxt-aos", "@nuxtjs/i18n", "@nuxtjs/sitemap", "@nuxtjs/robots", "nuxt-site-config"],
+  modules: [
+    "@nuxt/eslint",
+    "@nuxt/image",
+    "@nuxt/scripts",
+    "@nuxt/ui",
+    "@pinia/nuxt",
+    "nuxt-aos",
+    "@nuxtjs/i18n",
+    "@nuxtjs/sitemap",
+    "@nuxtjs/robots",
+  ],
 
   robots: {
     sitemap: `${process.env.NUXT_SITE_URL}/sitemap.xml`,
