@@ -102,11 +102,11 @@ useHead({
   link: [
     {
       rel: "canonical",
-      href: "https://saranabumilestari.com/about",
+      href: "https://www.saranabumilestari.com/about",
     },
     {
       rel: "alternate",
-      href: "https://saranabumilestari.com/about",
+      href: "https://www.saranabumilestari.com/about",
       hreflang: "id",
     },
   ],
@@ -135,7 +135,7 @@ useHead({
     },
   ],
 
-    script: [
+  script: [
     {
       type: "application/ld+json",
       children: JSON.stringify({

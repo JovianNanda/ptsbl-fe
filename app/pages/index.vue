@@ -27,9 +27,13 @@ useHead({
   link: [
     {
       rel: "canonical",
-      href: "https://saranabumilestari.com/",
+      href: "https://www.saranabumilestari.com/",
     },
-    { rel: "alternate", href: "https://saranabumilestari.com", hreflang: "id" },
+    {
+      rel: "alternate",
+      href: "https://www.saranabumilestari.com",
+      hreflang: "id",
+    },
   ],
   meta: [
     {

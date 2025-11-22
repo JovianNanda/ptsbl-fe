@@ -51,11 +51,11 @@ useHead({
   link: [
     {
       rel: "canonical",
-      href: "https://saranabumilestari.com/services",
+      href: "https://www.saranabumilestari.com/services",
     },
     {
       rel: "alternate",
-      href: "https://saranabumilestari.com/services",
+      href: "https://www.saranabumilestari.com/services",
       hreflang: "id",
     },
   ],
