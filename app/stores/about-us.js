@@ -11,6 +11,9 @@ export const useAboutStore = defineStore("about", {
 
   actions: {
     async fetchAbout() {
+      // Optimization: If we already have data (e.g. from server hydration), don't fetch again on client
+      if (this.data) return;
+
       const isoLocale = useStrapiLocale();
       const preloader = usePreloaderStore();
       const config = useRuntimeConfig();
@@ -21,18 +24,19 @@ export const useAboutStore = defineStore("about", {
       this.error = null;
 
       try {
-        const { data, error, pending } = await useFetch(
-          `${baseUrl}/about-section?populate=*&locale=${isoLocale.value}`,
-          {
-            method: "GET",
-            headers: { Accept: "application/json" },
-            transform: (data) => data,
-          }
-        );
+        // FIXED: Use $fetch inside Pinia Actions
+        const response = await $fetch(`${baseUrl}/about-section`, {
+          method: "GET",
+          headers: { Accept: "application/json" },
+          // Best Practice: Use 'query' object for cleaner URL parameters
+          query: {
+            populate: "*",
+            locale: isoLocale.value,
+          },
+        });
 
-        this.data = data.value;
-        this.error = error.value;
-        this.pending = pending.value;
+        // FIXED: Assign the raw response directly
+        this.data = response;
       } catch (err) {
         console.error("Failed to fetch about:", err);
         this.error = err;
@@ -44,6 +48,8 @@ export const useAboutStore = defineStore("about", {
   },
 
   getters: {
-    aboutData: (state) => state.data?.data?.data || {},
+    // Standard Strapi response is { data: {...}, meta: {...} }
+    // So we access state.data (response) -> .data (content)
+    aboutData: (state) => state.data?.data || {},
   },
 });

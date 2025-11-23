@@ -11,6 +11,9 @@ export const useHomepageStore = defineStore("homepage", {
 
   actions: {
     async fetchHomepage() {
+      // Optimization: If data exists, don't fetch again
+      if (this.data) return;
+
       const isoLocale = useStrapiLocale();
       const preloader = usePreloaderStore();
       const config = useRuntimeConfig();
@@ -21,18 +24,19 @@ export const useHomepageStore = defineStore("homepage", {
       this.error = null;
 
       try {
-        const { data, error, pending } = await useFetch(
-          `${baseUrl}/home-page?populate=*&locale=${isoLocale.value}`,
-          {
-            method: "GET",
-            headers: { Accept: "application/json" },
-            transform: (data) => data,
-          }
-        );
+        // FIXED: Use $fetch instead of useFetch inside Pinia actions
+        const response = await $fetch(`${baseUrl}/home-page`, {
+          method: "GET",
+          headers: { Accept: "application/json" },
+          // Best Practice: Pass query params as an object
+          query: {
+            populate: "*",
+            locale: isoLocale.value,
+          },
+        });
 
-        this.data = data.value;
-        this.error = error.value;
-        this.pending = pending.value;
+        // FIXED: Assign raw response directly
+        this.data = response;
       } catch (err) {
         console.error("Failed to fetch homepage:", err);
         this.error = err;
@@ -44,6 +48,6 @@ export const useHomepageStore = defineStore("homepage", {
   },
 
   getters: {
-    homePageData: (state) => state.data?.data?.data || {},
+    homePageData: (state) => state.data?.data || {},
   },
 });

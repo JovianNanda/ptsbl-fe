@@ -11,6 +11,9 @@ export const useFleetStore = defineStore("fleet", {
 
   actions: {
     async fetchFleet() {
+      // Optimization: If data exists (hydrated from server), don't fetch again
+      if (this.data) return;
+
       const isoLocale = useStrapiLocale();
       const preloader = usePreloaderStore();
       const config = useRuntimeConfig();
@@ -21,18 +24,19 @@ export const useFleetStore = defineStore("fleet", {
       this.error = null;
 
       try {
-        const { data, error, pending } = await useFetch(
-          `${baseUrl}/fleet-section?populate=*&locale=${isoLocale.value}`,
-          {
-            method: "GET",
-            headers: { Accept: "application/json" },
-            transform: (data) => data,
-          }
-        );
+        // FIXED: Use $fetch instead of useFetch inside Pinia actions
+        const response = await $fetch(`${baseUrl}/fleet-section`, {
+          method: "GET",
+          headers: { Accept: "application/json" },
+          // Best Practice: Pass query params as an object
+          query: {
+            populate: "*",
+            locale: isoLocale.value,
+          },
+        });
 
-        this.data = data.value;
-        this.error = error.value;
-        this.pending = pending.value;
+        // FIXED: Assign raw response directly
+        this.data = response;
       } catch (err) {
         console.error("Failed to fetch fleet:", err);
         this.error = err;
@@ -44,6 +48,6 @@ export const useFleetStore = defineStore("fleet", {
   },
 
   getters: {
-    fleetData: (state) => state.data?.data?.data || {},
+    fleetData: (state) => state.data?.data || {},
   },
 });

@@ -1,10 +1,10 @@
 <template>
   <div>
+    <!-- Hero Section -->
     <section
-      class="min-h-screen bg-cover bg-center"
-      :style="`background-image: url('${bgImage}')`"
+      class="min-h-screen bg-cover bg-center transition-all duration-500"
+      :style="bgImage ? `background-image: url('${bgImage}')` : ''"
     >
-      >
       <div
         class="backdrop-brightness-40 flex items-center justify-center h-screen"
       >
@@ -25,6 +25,8 @@
         </div>
       </div>
     </section>
+
+    <!-- Service Details List -->
     <div class="flex flex-col gap-10 mx-auto container my-20">
       <DetailCard
         v-for="(value, index) in services ?? []"
@@ -35,17 +37,27 @@
         title="LAYANAN"
       />
     </div>
+
+    <!-- CTA Section -->
     <div class="bg-soft-secondary py-16">
       <CallToAction />
     </div>
   </div>
 </template>
+
 <script setup>
+import { computed } from "vue";
+import { useHead, useRuntimeConfig, useAsyncData } from "#imports";
+
+// Components
 import UBadgeHome from "~/components/BadgeHome.vue";
-import { useServiceStore } from "~/stores/service";
-import { usePreloaderStore } from "~/stores/preloader";
 import CallToAction from "~/components/service/CallToAction.vue";
 
+// Stores
+import { useServiceStore } from "~/stores/service";
+// import { usePreloaderStore } from "~/stores/preloader"; // Stores handle this internally now
+
+// --- SEO & Meta ---
 useHead({
   title: "Layanan Pengelolaan Limbah B3 – PT Sarana Bumi Lestari",
   link: [
@@ -76,14 +88,12 @@ useHead({
       property: "og:image",
       content: "https://saranabumilestari.com/images/logoSBL_2.png",
     },
-
     { name: "twitter:card", content: "summary_large_image" },
     {
       name: "twitter:image",
       content: "https://saranabumilestari.com/images/LogoSBL.png",
     },
   ],
-
   script: [
     {
       type: "application/ld+json",
@@ -108,30 +118,33 @@ useHead({
   ],
 });
 
-const preloader = usePreloaderStore();
-
-preloader.show();
-
+// --- Config ---
 const runtimeConfig = useRuntimeConfig();
 const backendBaseUrl = runtimeConfig.public.backendBase;
+const { locale } = useI18n();
 
+// --- Data Fetching ---
 const servicesStore = useServiceStore();
-await servicesStore.fetchService();
 
-const allService = computed(() => servicesStore?.data?.data);
+// HYDRATION FIX: Use useAsyncData
+await useAsyncData("services-page-data", () => servicesStore.fetchService(), {
+  watch: [locale],
+});
+
+// --- Computed Data ---
+const allService = computed(() => servicesStore.data?.data);
 
 const bgImage = computed(() => {
-  const img = allService?.value?.image_bg?.[0];
+  // Safe access to nested image array
+  const img = allService.value?.image_bg?.[0];
   if (!img?.url) return null;
   return `${backendBaseUrl}${img.url}`;
 });
 
 const services = computed(() => {
-  const list = allService?.value?.services;
+  const list = allService.value?.services;
   return Array.isArray(list)
     ? [...list].sort((a, b) => a.position - b.position)
     : [];
 });
-
-preloader.hide();
 </script>

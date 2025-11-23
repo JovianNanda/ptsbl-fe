@@ -1,5 +1,5 @@
 <template>
-  <section class="pt-32 pb-14 bg-soft-secondary md:px-4">
+  <section v-if="allFleet?.data" class="pt-32 pb-14 bg-soft-secondary md:px-4">
     <div
       class="flex flex-col md:justify-between items-center md:items-start xl:flex-row gap-10 md:gap-4 px-4 md:px-0"
     >
@@ -25,20 +25,14 @@
             :key="stats?.id"
             class="mx-4 text-center justify-center flex flex-col items-center gap-2"
           >
-            <!-- <IconCustom
-              :tags="stats?.icon"
-              width="28"
-              height="28"
-              :class="
-                stats?.position % 2 === 0 ? 'text-secondary' : 'text-primary'
-              "
-            /> -->
             <BackendIcon
               :icon="stats?.icon"
               :class-name="
-                (stats?.position % 2 === 0 ? 'text-secondary' : 'text-primary' ) + ' w-7 h-7'
-              "/>
-
+                (stats?.position % 2 === 0
+                  ? 'text-secondary'
+                  : 'text-primary') + ' w-7 h-7'
+              "
+            />
             <h1 class="text-black text-xl">
               <AnimatedNumber :target="stats?.value" :duration="1500" />
             </h1>
@@ -47,93 +41,116 @@
         </div>
       </div>
 
-      <div
-        class="relative grid grid-rows-2 md:grid-rows-1 grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-5xl mx-auto"
-        style="position: relative"
-      >
-        <div class="w-full aspect-[4/5] overflow-hidden">
-          <UCarousel
-            v-slot="{ item }"
-            loop
-            pagination
-            wheel-gestures
-            :autoplay="{ delay: 2000 }"
-            :items="images"
-            class="w-full h-full object-cover fleet-carousel aspect-[4/5] relative"
-          >
-            <NuxtImg
-              :src="item"
-              class="w-full h-full object-cover items-stretch !object-center block aspect-[4/5]"
-              loading="lazy"
-            />
-          </UCarousel>
-        </div>
-        <!-- <NuxtImg
-            v-for="image in allFleet?.data?.images"
-            :key="image"
-            :src="`${backendBaseUrl}${image.url}`"
-            alt="Fleet Image"
-            class="flex w-fit object-cover xl:max-h-5/12 h-full flex-1"
-          /> -->
-
-        <div class="w-full aspect-[4/5] overflow-hidden">
-          <video
-            class="w-full h-full object-cover"
-            autoplay
-            loop
-            muted
-            playsinline
-          >
-            <source
-              :src="`${backendBaseUrl}${allFleet?.data?.video?.url}`"
-              type="video/mp4"
-            />
-            Your browser does not support the video tag.
-          </video>
-        </div>
+      <ClientOnly>
         <div
-          class="mx-4 text-center justify-center flex items-center gap-2 w-fit absolute flex-row bg-white rounded-xl p-4 top-0 left-1/2 transform translate-x-[-50%] -translate-y-1/2 m-auto lg:top-[100%] xl:top-[80%] lg:left-0 z-20"
+          class="relative grid grid-rows-2 md:grid-rows-1 grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-5xl mx-auto"
+          style="position: relative"
         >
-          <div
-            class="bg-primary text-white rounded-xl flex items-center justify-center p-2 h-full text-2xl"
-          >
-            <Icon name="uil:clock" />
+          <div class="w-full aspect-[4/5] overflow-hidden">
+            <UCarousel
+              v-slot="{ item }"
+              loop
+              pagination
+              wheel-gestures
+              :autoplay="{ delay: 2000 }"
+              :items="images"
+              class="w-full h-full object-cover fleet-carousel aspect-[4/5] relative"
+            >
+              <NuxtImg
+                :src="item"
+                class="w-full h-full object-cover items-stretch !object-center block aspect-[4/5]"
+                loading="lazy"
+              />
+            </UCarousel>
           </div>
 
-          <div class="flex-col flex">
-            <p class="text-gray-500 text-sm leading-tight flex-1">
-              Response Time
-            </p>
-            <h1 class="text-black text-lg flex-1 text-start">
-              <AnimatedNumber
-                :target="allFleet?.data?.response_time"
-                :duration="1500"
-              />
-            </h1>
+          <div class="w-full aspect-[4/5] overflow-hidden">
+            <video
+              v-if="videoUrl"
+              :src="videoUrl"
+              class="w-full h-full object-cover"
+              autoplay
+              loop
+              muted
+              playsinline
+            >
+              Your browser does not support the video tag.
+            </video>
+          </div>
+
+          <div
+            class="mx-4 text-center justify-center flex items-center gap-2 w-fit absolute flex-row bg-white rounded-xl p-4 top-0 left-1/2 transform translate-x-[-50%] -translate-y-1/2 m-auto lg:top-[100%] xl:top-[80%] lg:left-0 z-20"
+          >
+            <div
+              class="bg-primary text-white rounded-xl flex items-center justify-center p-2 h-full text-2xl"
+            >
+              <Icon name="uil:clock" />
+            </div>
+
+            <div class="flex-col flex">
+              <p class="text-gray-500 text-sm leading-tight flex-1">
+                Response Time
+              </p>
+              <h1 class="text-black text-lg flex-1 text-start">
+                <AnimatedNumber
+                  :target="allFleet?.data?.response_time"
+                  :duration="1500"
+                />
+              </h1>
+            </div>
           </div>
         </div>
-      </div>
+
+        <template #fallback>
+          <div
+            class="grid grid-cols-2 gap-4 w-full max-w-5xl mx-auto h-[500px]"
+          >
+            <div
+              class="bg-gray-200 rounded-xl animate-pulse h-full w-full"
+            ></div>
+            <div
+              class="bg-gray-200 rounded-xl animate-pulse h-full w-full"
+            ></div>
+          </div>
+        </template>
+      </ClientOnly>
     </div>
   </section>
 </template>
+
 <script setup>
 import { useFleetStore } from "~/stores/fleet";
+
+const { locale } = useI18n();
 const runtimeConfig = useRuntimeConfig();
 const backendBaseUrl = runtimeConfig.public.backendBase;
-
 const fleetStore = useFleetStore();
-await fleetStore.fetchFleet();
-const allFleet = computed(() => fleetStore?.data);
+
+await useAsyncData("fleet-data", () => fleetStore.fetchFleet(), {
+  watch: [locale],
+});
+
+const allFleet = computed(() => fleetStore.data);
 
 const images = computed(() => {
-  return allFleet?.value?.data?.images?.map((img) => backendBaseUrl + img.url);
+  return (
+    allFleet.value?.data?.images?.map((img) => backendBaseUrl + img.url) || []
+  );
+});
+
+const videoUrl = computed(() => {
+  const url = allFleet.value?.data?.video?.url;
+  if (!url) return null;
+  if (url.startsWith("http")) return url;
+  return backendBaseUrl + url;
 });
 </script>
+
 <style scoped>
 .fleet-carousel,
 .fleet-media {
   width: 100%;
-  aspect-ratio: 3 / 4; /* important: controls height stability */
+  aspect-ratio: 3 / 4;
   border-radius: 16px;
   object-fit: cover;
   overflow: hidden;

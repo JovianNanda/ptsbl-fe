@@ -11,6 +11,9 @@ export const useGlobalStore = defineStore("global", {
 
   actions: {
     async fetchGlobal() {
+      // Optimization: Prevent re-fetching if data exists
+      if (this.data) return;
+
       const isoLocale = useStrapiLocale();
       const preloader = usePreloaderStore();
       const config = useRuntimeConfig();
@@ -21,20 +24,22 @@ export const useGlobalStore = defineStore("global", {
       this.error = null;
 
       try {
-        const { data, error, pending } = await useFetch(
-          `${baseUrl}/global?populate=*&locale=${isoLocale.value}`,
-          {
-            method: "GET",
-            headers: { Accept: "application/json" },
-            transform: (data) => data,
-          }
-        );
+        // FIXED: Use $fetch instead of useFetch inside Pinia actions
+        // $fetch returns the raw response, not a reactive ref
+        const response = await $fetch(`${baseUrl}/global`, {
+          method: "GET",
+          headers: { Accept: "application/json" },
+          // Best Practice: Use query params object
+          query: {
+            populate: "*",
+            locale: isoLocale.value,
+          },
+        });
 
-        this.data = data.value;
-        this.error = error.value;
-        this.pending = pending.value;
+        // FIXED: Assign raw response directly
+        this.data = response;
       } catch (err) {
-        console.error("Failed to fetch homepage:", err);
+        console.error("Failed to fetch global:", err);
         this.error = err;
       } finally {
         this.pending = false;
@@ -44,6 +49,7 @@ export const useGlobalStore = defineStore("global", {
   },
 
   getters: {
-    homePageData: (state) => state.data?.data?.data || {},
+    // Renamed from homePageData to globalData for clarity
+    globalData: (state) => state.data?.data || {},
   },
 });

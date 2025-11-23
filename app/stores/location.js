@@ -11,6 +11,9 @@ export const useLocationStore = defineStore("location", {
 
   actions: {
     async fetchLocation() {
+      // Optimization: If data exists, don't fetch again
+      if (this.data) return;
+
       const isoLocale = useStrapiLocale();
       const preloader = usePreloaderStore();
       const config = useRuntimeConfig();
@@ -21,18 +24,20 @@ export const useLocationStore = defineStore("location", {
       this.error = null;
 
       try {
-        const { data, error, pending } = await useFetch(
-          `${baseUrl}/location-section?populate[locations][populate][lists]=*&locale=${isoLocale.value}`,
-          {
-            method: "GET",
-            headers: { Accept: "application/json" },
-            transform: (data) => data,
-          }
-        );
+        // FIXED: Use $fetch instead of useFetch inside Pinia actions
+        const response = await $fetch(`${baseUrl}/location-section`, {
+          method: "GET",
+          headers: { Accept: "application/json" },
+          // Best Practice: Pass query params as an object
+          // This handles URL encoding automatically for complex Strapi nested populates
+          query: {
+            "populate[locations][populate][lists]": "*",
+            locale: isoLocale.value,
+          },
+        });
 
-        this.data = data.value;
-        this.error = error.value;
-        this.pending = pending.value;
+        // FIXED: Assign raw response directly
+        this.data = response;
       } catch (err) {
         console.error("Failed to fetch location:", err);
         this.error = err;

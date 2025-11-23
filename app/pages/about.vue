@@ -1,10 +1,10 @@
 <template>
   <div>
+    <!-- Hero Section -->
     <section
-      class="min-h-screen bg-cover bg-center"
-      :style="`background-image: url('${bgImage}')`"
+      class="min-h-screen bg-cover bg-center transition-all duration-500"
+      :style="bgImage ? `background-image: url('${bgImage}')` : ''"
     >
-      >
       <div
         class="backdrop-brightness-40 flex items-center justify-center h-screen"
       >
@@ -28,19 +28,23 @@
         </div>
       </div>
     </section>
+
+    <!-- Details Section -->
     <div class="flex flex-col gap-10 mx-auto container my-20">
       <DetailCard
-        :key="allAdvantages?.id ?? 0"
+        :key="allAdvantages?.id ?? 'adv-0'"
         :data="allAdvantages ?? {}"
         title="KEUNGGULAN"
         index="0"
       />
       <DetailCard
-        :key="allCommitment?.id ?? 0"
+        :key="allCommitment?.id ?? 'com-0'"
         :data="allCommitment ?? {}"
         title="KOMITMEN"
       />
     </div>
+
+    <!-- Principle Section -->
     <div>
       <h1
         class="text-black text-3xl lg:text-4xl font-light text-center leading-[1.5]"
@@ -59,6 +63,8 @@
         />
       </div>
     </div>
+
+    <!-- Journey Section -->
     <div class="mt-40">
       <div class="flex flex-col items-center space-y-6">
         <UBadgeHome
@@ -83,20 +89,32 @@
         />
       </div>
     </div>
+
     <PartnerSection />
     <ContactCTA />
   </div>
 </template>
+
 <script setup>
+import { computed } from "vue";
+import { useHead, useRuntimeConfig, useAsyncData } from "#imports";
+
+// Components
 import UBadgeHome from "~/components/BadgeHome.vue";
-import { useAboutStore } from "~/stores/about-us";
-import { useAdvantageStore } from "/stores/advantage";
-import { useCommitmentStore } from "/stores/commitment";
-import { usePrincipleStore } from "/stores/principle";
-import { useJourneyStore } from "/stores/journey";
 import AdvantageCard from "~/components/advantage/AdvantageCard.vue";
 import PartnerSection from "~/components/sections/PartnerSection.vue";
+// Ensure DetailCard, JourneyCard, ContactCTA are imported or auto-imported by Nuxt
 
+// Stores
+// Fixed Import Paths: Using '~' alias for consistency
+import { useAboutStore } from "~/stores/about-us";
+import { useAdvantageStore } from "~/stores/advantage";
+import { useCommitmentStore } from "~/stores/commitment";
+import { usePrincipleStore } from "~/stores/principle";
+import { useJourneyStore } from "~/stores/journey";
+// import { usePreloaderStore } from "~/stores/preloader"; // Not needed in setup, stores handle it
+
+// --- SEO & Meta ---
 useHead({
   title: "Tentang Kami – PT Sarana Bumi Lestari",
   link: [
@@ -127,14 +145,12 @@ useHead({
       property: "og:image",
       content: "https://saranabumilestari.com/images/logoSBL_2.png",
     },
-
     { name: "twitter:card", content: "summary_large_image" },
     {
       name: "twitter:image",
       content: "https://saranabumilestari.com/images/LogoSBL.png",
     },
   ],
-
   script: [
     {
       type: "application/ld+json",
@@ -159,25 +175,36 @@ useHead({
   ],
 });
 
-const preloader = usePreloaderStore();
-
-preloader.show();
-
+// --- Config ---
 const runtimeConfig = useRuntimeConfig();
 const backendBaseUrl = runtimeConfig.public.backendBase;
 
+// --- Initialize Stores ---
 const aboutStore = useAboutStore();
-await aboutStore.fetchAbout();
-
 const advantageStore = useAdvantageStore();
-await advantageStore.fetchAdvantage();
-
 const commitmentStore = useCommitmentStore();
-await commitmentStore.fetchCommitment();
+const principleStore = usePrincipleStore();
+const journeyStore = useJourneyStore();
 
-const allAbout = computed(() => aboutStore?.data?.data);
+// --- HYDRATION FIX ---
+// Fetch all data in parallel on the server using useAsyncData.
+// This ensures the client waits for the server data before rendering.
+await useAsyncData("about-page-data", async () => {
+  await Promise.all([
+    aboutStore.fetchAbout(),
+    advantageStore.fetchAdvantage(),
+    commitmentStore.fetchCommitment(),
+    principleStore.fetchPrinciple(),
+    journeyStore.fetchJourney(),
+  ]);
+  return true; // Return value doesn't matter, we rely on store state
+});
+
+// --- Computed Data ---
+const allAbout = computed(() => aboutStore.data?.data);
+
 const allAdvantages = computed(() => {
-  const data = advantageStore?.data?.data;
+  const data = advantageStore.data?.data;
   if (!data) return null;
 
   return {
@@ -189,22 +216,14 @@ const allAdvantages = computed(() => {
       })) || [],
   };
 });
-const allCommitment = computed(() => commitmentStore?.data?.data);
 
-const principleStore = usePrincipleStore();
-await principleStore.fetchPrinciple();
-
-const allPrinciple = computed(() => principleStore?.data);
-
-const journey = useJourneyStore();
-await journey.fetchJourney();
-const allJourney = computed(() => journey?.data?.data);
+const allCommitment = computed(() => commitmentStore.data?.data);
+const allPrinciple = computed(() => principleStore.data);
+const allJourney = computed(() => journeyStore.data?.data);
 
 const bgImage = computed(() => {
-  const img = allAbout?.value?.image_bg;
+  const img = allAbout.value?.image_bg;
   if (!img?.url) return null;
   return `${backendBaseUrl}${img.url}`;
 });
-
-preloader.hide();
 </script>

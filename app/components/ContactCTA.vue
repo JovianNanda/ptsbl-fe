@@ -11,7 +11,13 @@
         B3 terbaik
       </p>
 
-      <NuxtLink :href="`https://wa.me/${telp.trim()}`" rel="noopener">
+      <NuxtLink
+        v-if="telp"
+        :to="`https://wa.me/${telp}`"
+        target="_blank"
+        external
+        rel="noopener"
+      >
         <UButton
           color="white"
           variant="solid"
@@ -28,14 +34,36 @@
 <script setup>
 import { useContactStore } from "~/stores/contact";
 
+// 1. Setup
+const { locale } = useI18n();
 const contactStore = useContactStore();
-await contactStore.fetchContact();
-const allContact = computed(() => contactStore?.data);
-const contacts = computed(() => {
-  const list = allContact.value?.data.cardList;
-  return Array.isArray(list)
-    ? [...list].sort((a, b) => a.position - b.position)
-    : [];
+
+// 2. SSR-Safe Data Fetching
+// Using a unique key 'cta-bottom-data' to separate it from other contact fetches
+await useAsyncData("cta-bottom-data", () => contactStore.fetchContact(), {
+  watch: [locale],
 });
-const telp = (contacts.value[0]?.subtitle || "").replace(/[^\d]/g, "");
+
+// 3. State Access
+const allContact = computed(() => contactStore.data);
+
+// 4. Computed List
+const contacts = computed(() => {
+  const list = allContact.value?.data?.cardList;
+
+  if (!Array.isArray(list)) return [];
+
+  return [...list].sort((a, b) => a.position - b.position);
+});
+
+// 5. Computed Phone Number
+// IMPORTANT: This must be computed. In your old code, it was a const calculated once.
+// If the data loaded slightly later, 'telp' would have remained empty forever.
+const telp = computed(() => {
+  // Safely access the first contact's subtitle
+  const rawNumber = contacts.value[0]?.subtitle || "";
+
+  // Remove non-numeric characters (spaces, dashes, +) for the API link
+  return rawNumber.replace(/[^\d]/g, "");
+});
 </script>

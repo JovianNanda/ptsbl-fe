@@ -7,10 +7,14 @@ export const useContactStore = defineStore("contact", {
     data: null,
     error: null,
     pending: false,
+    loading: false, // Added missing state for form submission
   }),
 
   actions: {
     async fetchContact() {
+      // Optimization: If data exists, don't fetch again
+      if (this.data) return;
+
       const isoLocale = useStrapiLocale();
       const preloader = usePreloaderStore();
       const config = useRuntimeConfig();
@@ -21,18 +25,19 @@ export const useContactStore = defineStore("contact", {
       this.error = null;
 
       try {
-        const { data, error, pending } = await useFetch(
-          `${baseUrl}/contact-section?populate=*&locale=${isoLocale.value}`,
-          {
-            method: "GET",
-            headers: { Accept: "application/json" },
-            transform: (data) => data,
-          }
-        );
+        // FIXED: Use $fetch instead of useFetch inside Pinia actions
+        const response = await $fetch(`${baseUrl}/contact-section`, {
+          method: "GET",
+          headers: { Accept: "application/json" },
+          // Best Practice: Pass query params as an object
+          query: {
+            populate: "*",
+            locale: isoLocale.value,
+          },
+        });
 
-        this.data = data.value;
-        this.error = error.value;
-        this.pending = pending.value;
+        // FIXED: Assign raw response directly
+        this.data = response;
       } catch (err) {
         console.error("Failed to fetch contact:", err);
         this.error = err;
@@ -87,6 +92,6 @@ export const useContactStore = defineStore("contact", {
   },
 
   getters: {
-    contactData: (state) => state.data?.data?.data || {},
+    contactData: (state) => state.data?.data || {},
   },
 });
