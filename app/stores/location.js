@@ -12,7 +12,7 @@ export const useLocationStore = defineStore("location", {
   actions: {
     async fetchLocation() {
       // Optimization: If data exists, don't fetch again
-      if (this.data) return;
+      // if (this.data) return;
 
       const isoLocale = useStrapiLocale();
       const preloader = usePreloaderStore();

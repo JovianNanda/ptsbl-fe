@@ -16,13 +16,13 @@ export const useAboutStore = defineStore("about", {
       const isoLocale = useStrapiLocale();
       const requestedLocale = isoLocale.value;
 
-      // FIXED OPTIMIZATION:
-      // Only stop fetching if we have data AND the language matches.
-      // If the languages are different (e.g., switching EN to ID), this will run false
-      // and allow the fetch to proceed.
-      if (this.data && this.currentLocale === requestedLocale) {
-        return;
-      }
+      // // FIXED OPTIMIZATION:
+      // // Only stop fetching if we have data AND the language matches.
+      // // If the languages are different (e.g., switching EN to ID), this will run false
+      // // and allow the fetch to proceed.
+      // if (this.data && this.currentLocale === requestedLocale) {
+      //   return;
+      // }
 
       const preloader = usePreloaderStore();
       const config = useRuntimeConfig();

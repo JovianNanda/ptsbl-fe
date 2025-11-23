@@ -12,7 +12,7 @@ export const useJourneyStore = defineStore("journey", {
   actions: {
     async fetchJourney() {
       // Optimization: If data exists (hydrated from server), don't fetch again
-      if (this.data) return;
+      // if (this.data) return;
 
       const isoLocale = useStrapiLocale();
       const preloader = usePreloaderStore();

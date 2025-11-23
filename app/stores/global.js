@@ -12,7 +12,7 @@ export const useGlobalStore = defineStore("global", {
   actions: {
     async fetchGlobal() {
       // Optimization: Prevent re-fetching if data exists
-      if (this.data) return;
+      // if (this.data) return;
 
       const isoLocale = useStrapiLocale();
       const preloader = usePreloaderStore();

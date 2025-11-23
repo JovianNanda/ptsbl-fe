@@ -13,7 +13,7 @@ export const useContactStore = defineStore("contact", {
   actions: {
     async fetchContact() {
       // Optimization: If data exists, don't fetch again
-      if (this.data) return;
+      // if (this.data) return;
 
       const isoLocale = useStrapiLocale();
       const preloader = usePreloaderStore();

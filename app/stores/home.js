@@ -12,7 +12,7 @@ export const useHomepageStore = defineStore("homepage", {
   actions: {
     async fetchHomepage() {
       // Optimization: If data exists, don't fetch again
-      if (this.data) return;
+      // if (this.data) return;
 
       const isoLocale = useStrapiLocale();
       const preloader = usePreloaderStore();

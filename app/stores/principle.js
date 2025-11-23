@@ -12,7 +12,7 @@ export const usePrincipleStore = defineStore("principle", {
   actions: {
     async fetchPrinciple() {
       // Optimization: If data exists (hydrated from server), don't fetch again
-      if (this.data) return;
+      // if (this.data) return;
 
       const isoLocale = useStrapiLocale();
       const preloader = usePreloaderStore();
