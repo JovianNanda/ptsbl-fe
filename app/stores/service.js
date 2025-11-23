@@ -11,8 +11,8 @@ export const useServiceStore = defineStore("service", {
 
   actions: {
     async fetchService() {
-      // Optimization: If data exists (hydrated from server), don't fetch again
-      if (this.data) return;
+      // // Optimization: If data exists (hydrated from server), don't fetch again
+      // if (this.data) return;
 
       const isoLocale = useStrapiLocale();
       const config = useRuntimeConfig();

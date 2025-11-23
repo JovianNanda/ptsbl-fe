@@ -7,14 +7,23 @@ export const useAboutStore = defineStore("about", {
     data: null,
     error: null,
     pending: false,
+    // NEW: Track which language we currently have in memory
+    currentLocale: null,
   }),
 
   actions: {
     async fetchAbout() {
-      // Optimization: If we already have data (e.g. from server hydration), don't fetch again on client
-      if (this.data) return;
-
       const isoLocale = useStrapiLocale();
+      const requestedLocale = isoLocale.value;
+
+      // FIXED OPTIMIZATION:
+      // Only stop fetching if we have data AND the language matches.
+      // If the languages are different (e.g., switching EN to ID), this will run false
+      // and allow the fetch to proceed.
+      if (this.data && this.currentLocale === requestedLocale) {
+        return;
+      }
+
       const preloader = usePreloaderStore();
       const config = useRuntimeConfig();
       const baseUrl = config.public.apiBase;
@@ -24,19 +33,18 @@ export const useAboutStore = defineStore("about", {
       this.error = null;
 
       try {
-        // FIXED: Use $fetch inside Pinia Actions
         const response = await $fetch(`${baseUrl}/about-section`, {
           method: "GET",
           headers: { Accept: "application/json" },
-          // Best Practice: Use 'query' object for cleaner URL parameters
           query: {
             populate: "*",
-            locale: isoLocale.value,
+            locale: requestedLocale, // Use the variable
           },
         });
 
-        // FIXED: Assign the raw response directly
         this.data = response;
+        // NEW: Update the tracker so we know we now have this language stored
+        this.currentLocale = requestedLocale;
       } catch (err) {
         console.error("Failed to fetch about:", err);
         this.error = err;
@@ -48,8 +56,6 @@ export const useAboutStore = defineStore("about", {
   },
 
   getters: {
-    // Standard Strapi response is { data: {...}, meta: {...} }
-    // So we access state.data (response) -> .data (content)
     aboutData: (state) => state.data?.data || {},
   },
 });
