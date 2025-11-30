@@ -7,14 +7,12 @@ export const useContactStore = defineStore("contact", {
     data: null,
     error: null,
     pending: false,
-    loading: false, // Added missing state for form submission
+    loading: false, // This is the single source of truth for loading
   }),
 
   actions: {
     async fetchContact() {
-      // Optimization: If data exists, don't fetch again
-      // if (this.data) return;
-
+      // ... (Your existing fetch code is fine, keep it here) ...
       const isoLocale = useStrapiLocale();
       const preloader = usePreloaderStore();
       const config = useRuntimeConfig();
@@ -22,24 +20,14 @@ export const useContactStore = defineStore("contact", {
 
       preloader.show();
       this.pending = true;
-      this.error = null;
-
       try {
-        // FIXED: Use $fetch instead of useFetch inside Pinia actions
         const response = await $fetch(`${baseUrl}/contact-section`, {
           method: "GET",
           headers: { Accept: "application/json" },
-          // Best Practice: Pass query params as an object
-          query: {
-            populate: "*",
-            locale: isoLocale.value,
-          },
+          query: { populate: "*", locale: isoLocale.value },
         });
-
-        // FIXED: Assign raw response directly
         this.data = response;
       } catch (err) {
-        console.error("Failed to fetch contact:", err);
         this.error = err;
       } finally {
         this.pending = false;
@@ -52,16 +40,21 @@ export const useContactStore = defineStore("contact", {
       const backendBaseUrl = runtimeConfig.public.backendBase;
       const toast = useToast();
 
-      // ✅ Basic validation
+      // 1. Prevent double submission if already loading
+      if (this.loading) return false;
+
+      // 2. Validation
       if (!payload.name || !payload.email || !payload.message) {
         toast.add({
           title: "Form belum lengkap",
           description: "Nama, email, dan pesan wajib diisi.",
+          color: "yellow",
         });
-        return;
+        return false;
       }
 
       this.loading = true;
+
       try {
         await $fetch(`${backendBaseUrl}/api/contact-messages`, {
           method: "POST",
@@ -69,22 +62,24 @@ export const useContactStore = defineStore("contact", {
           body: { data: payload },
         });
 
+        // Success Toast
         toast.add({
           title: "Pesan terkirim 🎉",
           description: "Terima kasih! Kami akan segera menghubungi Anda.",
           icon: "i-heroicons-check-circle",
-          color: "primary",
-          timeout: 4000,
+          color: "primary", // Nuxt UI usually uses 'primary' or 'green'
         });
+
+        return true; // Return true to tell component to clear form
       } catch (error) {
         console.error(error);
         toast.add({
           title: "Gagal mengirim pesan 😢",
           description: "Terjadi kesalahan, silakan coba lagi nanti",
           icon: "i-heroicons-x-circle",
-          color: "danger",
-          timeout: 4000,
+          color: "red",
         });
+        return false;
       } finally {
         this.loading = false;
       }

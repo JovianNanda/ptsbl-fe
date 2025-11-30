@@ -49,13 +49,14 @@
         </div>
 
         <UCard class="bg-blue-50 border-none shadow-none p-8 ring-0">
-          <UForm class="space-y-4" @submit="handleSubmit">
+          <UForm class="space-y-4" @submit.prevent="handleSubmit">
             <UFormField label="Nama Lengkap" required class="w-full">
               <UInput
                 v-model="form.name"
                 placeholder="Nama Anda"
                 class="w-full"
                 required
+                :disabled="contactStore.loading"
               />
             </UFormField>
 
@@ -66,6 +67,7 @@
                 placeholder="email@contoh.com"
                 class="w-full"
                 required
+                :disabled="contactStore.loading"
               />
             </UFormField>
 
@@ -75,6 +77,7 @@
                 placeholder="+62 ..."
                 class="w-full"
                 required
+                :disabled="contactStore.loading"
               />
             </UFormField>
 
@@ -85,6 +88,7 @@
                 class="w-full"
                 placeholder="Tulis pesan Anda..."
                 required
+                :disabled="contactStore.loading"
               />
             </UFormField>
 
@@ -93,7 +97,8 @@
               block
               color="primary"
               class="mt-4 py-2"
-              :loading="isSubmitting"
+              :loading="contactStore.loading"
+              :disabled="contactStore.loading"
             >
               Kirim Pesan
               <UIcon name="i-heroicons-paper-airplane-20-solid" class="ml-2" />
@@ -108,32 +113,23 @@
 <script setup>
 import { useContactStore } from "~/stores/contact";
 
-// 1. Setup
 const { locale } = useI18n();
 const contactStore = useContactStore();
-const toast = useToast(); // Requires Nuxt UI
 
-// 2. Data Fetching (SSR & Locale Aware)
+// Data Fetching
 await useAsyncData("contact-data", () => contactStore.fetchContact(), {
   watch: [locale],
 });
 
-// 3. Computeds
-// Access the getter (assumes getter name is contactData)
 const contactData = computed(() => contactStore.contactData);
 
 const sortedContacts = computed(() => {
-  // Access the cardList safely
   const list = contactData.value?.cardList;
-
   if (!Array.isArray(list)) return [];
-
-  // Create a copy to avoid mutating store state
   return [...list].sort((a, b) => a.position - b.position);
 });
 
-// 4. Form Handling
-const isSubmitting = ref(false);
+// Form Handling
 const form = reactive({
   name: "",
   email: "",
@@ -142,38 +138,21 @@ const form = reactive({
 });
 
 const handleSubmit = async () => {
-  isSubmitting.value = true;
+  // We don't need local 'isSubmitting' anymore, we use the store
 
-  try {
-    await contactStore.submitContactForm({
-      name: form.name.trim(),
-      email: form.email.trim(),
-      phone: form.phone.trim(),
-      message: form.message.trim(),
-    });
+  const success = await contactStore.submitContactForm({
+    name: form.name.trim(),
+    email: form.email.trim(),
+    phone: form.phone.trim(),
+    message: form.message.trim(),
+  });
 
-    // Success Feedback
-    toast.add({
-      title: "Success",
-      description: "Pesan berhasil dikirim!",
-      color: "green",
-    });
-
-    // Reset Form
+  // Only clear form if the store says it was successful
+  if (success) {
     form.name = "";
     form.email = "";
     form.phone = "";
     form.message = "";
-  } catch (error) {
-    // Error Feedback
-    toast.add({
-      title: "Error",
-      description: "Gagal mengirim pesan.",
-      color: "red",
-    });
-    console.error(error);
-  } finally {
-    isSubmitting.value = false;
   }
 };
 </script>
