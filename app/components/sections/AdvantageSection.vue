@@ -12,12 +12,12 @@
       </p>
 
       <div
-        class="flex flex-wrap gap-8 mt-18 mx-auto items-center justify-center"
+        class="flex flex-wrap flex-col md:flex-row gap-8 mt-18 mx-auto items-stretch justify-center"
       >
         <AdvantageCard
           v-for="advantage in sortedAdvantages"
           :key="advantage.id"
-          class="basis-1/3"
+          class="w-full md:w-1/3"
           :advantage="advantage"
         />
       </div>

@@ -19,7 +19,8 @@
           class="e"
           :class-name="
             (props.service.position % 2 === 0 ? 'bg-primary' : 'bg-secondary') +
-            ' w-12 h-12 p-2 rounded-2xl text-white'"
+            ' w-12 h-12 p-2 rounded-2xl text-white'
+          "
         />
       </div>
       <NuxtImg
