@@ -25,7 +25,7 @@
         </div>
 
         <div class="flex flex-wrap gap-4 justify-center">
-          <div class="flex gap-4 flex-1 w-full">
+          <div class="flex flex-col md:flex-row gap-4 flex-1 w-full">
             <SmartLink
               v-for="value in homeData.cta_button || []"
               :key="value?.id + '-' + (value?.cta_button_class || '')"
@@ -39,7 +39,6 @@
                     : 'bg-primary',
                   'cursor-pointer px-8 py-3 w-auto flex-1 inline-flex justify-center transition-all items-center',
                 ]"
-                class="rounded-full"
               >
                 {{ value?.cta_button_text }}
                 <IconCustom :tags="value?.Icon" />
